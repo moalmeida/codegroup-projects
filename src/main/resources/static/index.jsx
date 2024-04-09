@@ -1,11 +1,151 @@
-// 'use strict';
+'use strict';
 
-const ProjectHome = () => {
+const { StrictMode, Suspense, useState, useCallback, useEffect, useMemo } = React
+const { createRoot } = ReactDOM
+
+const useProjetos = () => {
+    const [projetos, setProjetos] = useState(null)
+    const [projeto, setProjeto] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+    const buscarProjetos = useCallback(
+        async () => {
+            setLoading(true)
+            setError(null)
+            fetch('/api/projetos', {
+                method: "GET"
+            }).then((res) => res.json())
+                .then((json) => {
+                    setProjetos(json)
+                })
+                .catch((err) => {
+                    setError(err)
+                    setProjetos(null)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        },
+        [setLoading, setProjetos, setError],
+    )
+
+    const buscarProjeto = useCallback(
+        async ({ id }) => {
+            setLoading(true)
+            setError(null)
+            fetch(`/api/projetos/${id}`, {
+                method: "GET"
+            }).then((res) => res.json())
+                .then((json) => {
+                    setProjeto(json)
+                })
+                .catch((err) => {
+                    setError(err)
+                    setProjeto(null)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        },
+        [setLoading, setProjeto, setError],
+    )
+
+    const criarProjeto = useCallback(
+        async ({ projeto }) => {
+            setLoading(true)
+            setError(null)
+            fetch(`/api/projetos`, {
+                method: "POST",
+                body: JSON.stringify(projeto),
+            }).then((res) => res.json())
+                .then((json) => {
+                    setProjeto(json)
+                })
+                .catch((err) => {
+                    setError(err)
+                    setProjeto(null)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        },
+        [setLoading, setProjeto, setError],
+    )
+
+    const atualizarProjeto = useCallback(
+        async ({ id, projeto }) => {
+            setLoading(true)
+            setError(null)
+            fetch(`/api/projetos/${id}`, {
+                method: "PATCH",
+                body: JSON.stringify(projeto),
+            }).then((res) => res.json())
+                .then((json) => {
+                    setProjeto(json)
+                })
+                .catch((err) => {
+                    setError(err)
+                    setProjeto(null)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        },
+        [setLoading, setProjeto, setError],
+    )
+
+    const removerProjeto = useCallback(
+        async () => {
+            setLoading(true)
+            setError(null)
+            fetch(`/api/projetos/${id}`, {
+                method: "DELETE"
+            }).then((res) => res.json())
+                .catch((err) => {
+                    setError(err)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        },
+        [setLoading, setError],
+    )
+
+    return useMemo(
+        () => ({
+            projetos,
+            projeto,
+            loading,
+            error,
+            buscarProjetos,
+            buscarProjeto,
+            criarProjeto,
+            atualizarProjeto,
+            removerProjeto,
+        }),
+        [
+            projetos,
+            projeto,
+            loading,
+            error,
+            buscarProjetos,
+            buscarProjeto,
+            criarProjeto,
+            atualizarProjeto,
+            removerProjeto,
+        ],
+    )
+}
+
+
+const ProjectHome = ({ projetos, salvarProjeto }) => {
+
     return (
         <>
-            <div class="container mt-5">
-                <button type="button" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addItemModal">Adicionar</button>
-                <table class="table">
+            <div className="container mt-5">
+                <button type="button" className="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addItemModal">Adicionar</button>
+                <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -14,22 +154,31 @@ const ProjectHome = () => {
                         </tr>
                     </thead>
                     <tbody id="itemTableBody">
+                        {projetos?.map(projeto => {
+                            return (
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
-            <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addItemModalLabel">Cadastrar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div className="modal fade" id="addItemModal" tabIndex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="addItemModalLabel">Cadastrar</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                         </div>
-                        <div class="modal-body">
-                            <input type="text" class="form-control" id="newItemName" placeholder="Item Name" />
+                        <div className="modal-body">
+                            <input type="text" className="form-control" id="newItemName" placeholder="Item Name" />
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="cancelItem()">Salvar</button>
-                            <button type="button" class="btn btn-primary" onclick="addItem()">Salvar</button>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" onClick={() => { console.log("cancelou") }} data-bs-dismiss="modal" aria-label="close">Cancelar</button>
+                            <button type="button" className="btn btn-primary" onClick={salvarProjeto}>Salvar</button>
                         </div>
                     </div>
                 </div>
@@ -49,9 +198,9 @@ const SplashScreen = () => {
 
 const Header = () => {
     return (
-        <nav class="navbar navbar-dark bg-primary">
-            <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1">cadastro</span>
+        <nav className="navbar navbar-dark bg-primary">
+            <div className="container-fluid">
+                <span className="navbar-brand mb-0 h1">cadastro</span>
             </div>
         </nav>
     )
@@ -60,51 +209,37 @@ const Header = () => {
 
 const Footer = () => {
     return (
-        <footer class="bg-light text-center text-lg-start mt-5">
-            <div class="text-left p-3">
+        <footer className="bg-light text-center text-lg-start mt-5">
+            <div className="text-left p-3">
                 &copy; 2024 CodeGroup
             </div>
         </footer>
     )
 }
 
-
-
 function ProjectPage() {
+    const { projetos, loading, buscarProjetos } = useProjetos()
+
+    useEffect(() => {
+        console.log('buscarProjetos', Date())
+        buscarProjetos()
+    }, [buscarProjetos])
+
+    const handleSalvarProjeto = () => {
+
+    }
+
     return (
         <>
             <Header />
-            <ProjectHome />
+            {!loading && (<ProjectHome projetos={projetos} salvarProjeto={handleSalvarProjeto} />)}
             <Footer />
         </>
     );
 };
 
-// const router = ReactRouter.createBrowserRouter([
-//     //     // //     {
-//     //     // //         path: '/',
-//     //     // //         element: <ReactRouterDOM.Navigate to={'/projetos'} replace />,
-//     //     // //     },
-//     {
-//         path: '/projetos',
-//         element: (
-//             <React.Suspense fallback={<SplashScreen />}>
-//                 {/* <ReactRouterDOM.Outlet /> */}
-//             </React.Suspense>
-//         ),
-//         children: [
-//             { element: <ProjectPage />, index: true },
-//         ],
-//     },
-//     //     // //     // { path: '*', element: <ReactRouterDOM.Navigate to="/404" replace /> },
-// ]);
-
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-        <React.Suspense fallback={<SplashScreen />}>
-            {/* <ReactRouterDOM.RouterProvider router={router} /> */}
-            <ProjectPage />
-        </React.Suspense>
-    </React.StrictMode>
+createRoot(document.getElementById("root")).render(
+    <Suspense fallback={<SplashScreen />}>
+        <ProjectPage />
+    </Suspense>
 );
