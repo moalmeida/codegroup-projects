@@ -1,8 +1,9 @@
-package br.com.codegroup.projects.service;
+package br.com.codegroup.projects.service.impl;
 
 import br.com.codegroup.projects.entity.Pessoa;
 import br.com.codegroup.projects.repository.PessoaRepository;
-import org.springframework.http.ResponseEntity;
+import br.com.codegroup.projects.service.PessoaService;
+import br.com.codegroup.projects.service.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,13 +38,11 @@ public class PessoaServiceImpl implements PessoaService {
         Pessoa pessoa = pessoaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa not found for this id :: " + id));
 
-        // Update entity fields here
-
         return pessoaRepository.save(pessoa);
     }
 
     @Override
-    public delete(Long id) {
+    public void delete(Long id) {
         Pessoa pessoa = pessoaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa not found for this id :: " + id));
 

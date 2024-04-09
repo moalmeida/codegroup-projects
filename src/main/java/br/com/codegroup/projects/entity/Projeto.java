@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "projeto")
-public class ProjetoEntity {
+public class Projeto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,7 +15,7 @@ public class ProjetoEntity {
 
     @ManyToOne
     @JoinColumn(name = "idgerente", nullable = false)
-    private PessoaEntity gerente;
+    private Pessoa gerente;
 
 }
 

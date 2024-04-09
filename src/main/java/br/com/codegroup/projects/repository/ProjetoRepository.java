@@ -1,7 +1,7 @@
 package br.com.codegroup.projects.repository;
 
-import org.springframework.stereotype.Repository;
+import br.com.codegroup.projects.entity.Projeto;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface ProjectRepository {
+public interface ProjetoRepository extends JpaRepository<Projeto, Long> {
 }

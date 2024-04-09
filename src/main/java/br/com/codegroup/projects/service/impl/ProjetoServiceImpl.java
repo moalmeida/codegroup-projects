@@ -1,7 +1,7 @@
-package br.com.codegroup.projects.service;
+package br.com.codegroup.projects.service.impl;
 
 import br.com.codegroup.projects.entity.Projeto;
-import org.springframework.http.ResponseEntity;
+import br.com.codegroup.projects.service.ProjetoService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
