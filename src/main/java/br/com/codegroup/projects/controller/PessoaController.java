@@ -1,7 +1,10 @@
 package br.com.codegroup.projects.controller;
 
+import br.com.codegroup.projects.controller.exceptions.ResourceNotFoundException;
 import br.com.codegroup.projects.entity.Pessoa;
-import br.com.codegroup.projects.service.PessoaService;
+import br.com.codegroup.projects.repository.PessoaRepository;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,42 +14,45 @@ import java.util.List;
 @RequestMapping("/api/pessoas")
 public class PessoaController {
 
-    private final PessoaService pessoaService;
+    private final PessoaRepository pessoaRepository;
 
-    public PessoaController(PessoaService pessoaService) {
-        this.pessoaService = pessoaService;
-    }
-
-    @PostMapping
-    public Pessoa addPessoa(@RequestBody Pessoa pessoa) {
-        return pessoaService.save(pessoa);
+    public PessoaController(PessoaRepository pessoaRepository) {
+        this.pessoaRepository = pessoaRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<Pessoa>> getAllPessoas() {
-        List<Pessoa> pessoas = pessoaService.findAll();
+    public ResponseEntity<List<Pessoa>> buscarTodos() {
+        List<Pessoa> pessoas = pessoaRepository.findAll();
         return ResponseEntity.ok(pessoas);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pessoa> getPessoaById(@PathVariable Long id) {
-        return pessoaService.findById(id)
+    public ResponseEntity<Pessoa> buscarPorId(@PathVariable Long id) {
+        return pessoaRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Pessoa> updatePessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
-        pessoaService.update(id, pessoa);
+    @PostMapping
+    public Pessoa addPessoa(@Valid @RequestBody Pessoa pessoa) {
+        return pessoaRepository.saveAndFlush(pessoa);
+    }
 
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @Valid @RequestBody Pessoa entrada) {
+        Pessoa entidade = this.pessoaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found for this id :: " + id));
+
+        entidade.setNome(entrada.getNome());
+
+        this.pessoaRepository.saveAndFlush(entidade);
+        return ResponseEntity.status(201).body(entidade);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePessoa(@PathVariable Long id) {
-        pessoaService.delete(id);
-        return ResponseEntity.ok().build();
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removerPessoa(@PathVariable Long id) {
+        pessoaRepository.deleteById(id);
     }
 
 }

@@ -25,7 +25,7 @@ spring:
       hibernate:
         dialect: 'org.hibernate.dialect.PostgreSQLDialect'
     hibernate:
-      ddl-auto: update #update
+      ddl-auto: validate
     generate-ddl: true
 
 logging:

@@ -1,10 +1,18 @@
 package br.com.codegroup.projects.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "membros")
-public class Membros {
+public class Membros implements Serializable {
 
     @EmbeddedId
     private MembrosId id;
@@ -19,15 +27,4 @@ public class Membros {
     @JoinColumn(name = "idpessoa")
     private Pessoa pessoa;
 
-    // Default constructor
-    public Membros() {
-    }
-
-    // Constructors, Getters, and Setters
-
-    public Membros(MembrosId id) {
-        this.id = id;
-    }
-
-    // Additional getters and setters for projeto and pessoa
 }
