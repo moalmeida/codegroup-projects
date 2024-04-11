@@ -50,12 +50,6 @@ public class IndexController {
         return "projetos/list";
     }
 
-    @PostMapping("/projetos/cadastrar")
-    public String incluirProjeto(Model model, @Valid @RequestBody Projeto projeto) {
-        this.projetoRepository.save(projeto);
-        return "redirect:/projetos";
-    }
-
     @PostMapping("/projetos/remover/{id}")
     public String removerProjeto(@PathVariable Long id) {
         this.projetoRepository.deleteById(id);

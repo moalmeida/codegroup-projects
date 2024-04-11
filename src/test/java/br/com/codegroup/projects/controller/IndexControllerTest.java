@@ -57,17 +57,6 @@ class IndexControllerTest {
     }
 
     @Test
-    public void testIncluirProjeto() {
-        Projeto projeto = new Projeto();
-        when(projetoRepository.save(any(Projeto.class))).thenReturn(projeto);
-
-        String viewName = indexController.incluirProjeto(model, projeto);
-
-        assertEquals("redirect:/projetos", viewName);
-        verify(projetoRepository, times(1)).save(any(Projeto.class));
-    }
-
-    @Test
     public void testRemoverProjeto() {
         Long id = 1L;
         doNothing().when(projetoRepository).deleteById(id);

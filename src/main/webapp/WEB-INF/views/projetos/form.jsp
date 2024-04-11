@@ -15,31 +15,6 @@
     <link href="https://unpkg.com/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
     <link href="https://unpkg.com/bootswatch@5.3.3/dist/lux/bootstrap.min.css" rel="stylesheet" />
     <link href="https://unpkg.com/jquery-ui@1.13.2/dist/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <style>
-        .ui-autocomplete-input {
-            padding: 5px;
-        }
-
-        #selected-items {
-            padding: 5px;
-            border: 1px solid #ccc;
-            margin-top: 5px;
-        }
-
-        .selected-item {
-            display: inline-block;
-            padding: 2px 5px;
-            margin: 2px;
-            background-color: #78C3F3;
-            color: white;
-            border-radius: 5px;
-        }
-
-        .selected-item .remove-item {
-            margin-left: 5px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 
 <body>
@@ -58,14 +33,15 @@
         </div>
         <div class="row">
             <div>
-                <form action="/projetos/cadastrar">
+                <form>
+                    <input type="hidden" id="input_id" value='<c:out value="${projeto.id}" />' />
                     <div class="row">
                         <fieldset>
                             <label class="form-label mt-4 fs-4" htmlFor="input_nome">
                                 nome
                             </label>
-                            <input class="form-control fs-4" id="input_nome" value="<c:out value="
-                                ${projeto.nome}" />"></textarea>
+                            <input class="form-control fs-4" id="input_nome"
+                                value='<c:out value="${projeto.nome}" />'></input>
                         </fieldset>
                     </div>
                     <div class="row">
@@ -74,8 +50,8 @@
                                 <label class="form-label mt-4 fs-4" htmlFor="input_data_inicio">
                                     data de início
                                 </label>
-                                <input class="form-control fs-4 fmt-date" id="input_data_inicio" type="text"
-                                    value="<c:out value=" ${projeto.dataInicio}" />" />
+                                <input value='<c:out value="${projeto.dataInicio}" />'
+                                    class="form-control fs-4 fmt-date" id="input_data_inicio" type="text" />
                             </fieldset>
                         </div>
                         <div class="col">
@@ -83,11 +59,13 @@
                                 <label class="form-label mt-4 fs-4" htmlFor="select_gerente">
                                     gerente responsavel
                                 </label>
-                                <select class="form-select fs-4" id="select_gerente">
+                                <select value='<c:out value="${projeto.gerente.id}"/>' class="form-select fs-4"
+                                    id="select_gerente">
                                     <option></option>
                                     <c:forEach var="ger" items="${gerentes}">
-                                        <option value="<c:out value=" ${ger.id}" />">
-                                        <c:out value="${ger.nome}" />
+                                        <option value='<c:out value=" ${ger.id}"/>' <c:if
+                                            test="${ger.id == projeto.gerente.id}">selected</c:if>>
+                                            <c:out value="${ger.nome}" />
                                         </option>
                                     </c:forEach>
                                 </select>
@@ -99,10 +77,9 @@
                             <fieldset>
                                 <label class="form-label mt-4 fs-4 " htmlFor="input_data_previsao_fim">
                                     previsão de término
-                                    <c:out value="${projeto.dataPrevisaoFim}" />
                                 </label>
-                                <input class="form-control fs-4 fmt-date" id="input_data_previsao_fim" type="text"
-                                    value="<c:out value=" ${projeto.dataPrevisaoFim}" />" />
+                                <input value='<c:out value=" ${projeto.dataPrevisaoFim}" />'
+                                    class="form-control fs-4 fmt-date" id="input_data_previsao_fim" type="text" />
                             </fieldset>
                         </div>
                         <div class="col">
@@ -110,8 +87,8 @@
                                 <label class="form-label mt-4 fs-4" htmlFor="input_data_fim">
                                     data real de término
                                 </label>
-                                <input class="form-control fs-4 fmt-date" id="input_data_fim" type="text"
-                                    value="<c:out value=" ${projeto.dataFim}" />" />
+                                <input value='<c:out value=" ${projeto.dataFim}" />' class="form-control fs-4 fmt-date"
+                                    id="input_data_fim" type="text" />
                             </fieldset>
                         </div>
                     </div>
@@ -122,18 +99,19 @@
                                     orçamento total
                                 </label>
                                 <input class="form-control fs-4 fmt-money" id="input_orcamento" type="text"
-                                    value="<c:out value=" ${projeto.orcamento}" />" />
+                                    value='<c:out value=" ${projeto.orcamento}" />' />
                             </fieldset>
                             <fieldset>
                                 <label class="form-label mt-4 fs-4" htmlFor="select_status">
                                     status
                                 </label>
-                                <select class="form-select fs-4" id="select_status">
+                                <select value='<c:out value="${projeto.status}"/>' class="form-select fs-4"
+                                    id="select_status">
                                     <option></option>
                                     <c:forEach var="sts" items="${status}">
-                                        <option></option>
-                                        <option value="<c:out value=" ${sts}" />">
-                                        <c:out value="${sts}" />
+                                        <option value='<c:out value="${sts}"/>' <c:if test="${sts == projeto.status}">
+                                            selected</c:if>>
+                                            <c:out value="${sts}" />
                                         </option>
                                     </c:forEach>
                                 </select>
@@ -145,12 +123,38 @@
                                     descrição
                                 </label>
                                 <textarea class="form-control fs-4" id="textarea_descricao" rows="5"
-                                    value="<c:out value=" ${projeto.descricao}" />"></textarea>
+                                    value='<c:out value="${projeto.descricao}"/>'></textarea>
                             </fieldset>
                         </div>
                     </div>
                     <div class="row">
-                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <div class="col">
+                            <label class="form-label mt-4 fs-4" htmlFor="select_risco">
+                                risco
+                            </label>
+                            <select value='<c:out value="${projeto.risco}"/>' class="form-select fs-4"
+                                id="select_risco">
+                                <option></option>
+                                <c:forEach var="rsc" items="${riscos}">
+                                    <option value='<c:out value="${rsc}"/>' <c:if test="${rsc == projeto.risco}">
+                                        selected</c:if>>
+                                        <c:out value="${rsc}" />
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <fieldset>
+                                <label class="form-label mt-4 fs-4" htmlFor="input_funcionarios">
+                                    funcionários
+                                </label>
+                                <input class="form-control fs-4" id="input_funcionarios" type="text" />
+                                <div id="funcionarios-html" class="mt-5"></div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row-reverse" style="padding-top: 70px; padding-bottom: 50px;">
+                        <button type="button" class="btn btn-primary btn-lg" onclick="cadastrar()">Salvar</button>
                     </div>
                 </form>
             </div>
@@ -166,106 +170,113 @@
     <script src="https://unpkg.com/jquery-ui@1.13.2/dist/jquery-ui.min.js" crossorigin></script>
     <script src="https://unpkg.com/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js" crossorigin></script>
     <script>
+
+        const selected = [
+            <c:forEach var="func" items="${projeto.funcionarios}">
+                {value: '<c:out value="${func.id}" />', label: '<c:out value="${func.nome}" />' },
+            </c:forEach>
+        ];
+
+        const available = [
+            <c:forEach var="func" items="${funcionarios}">
+                {value: '<c:out value="${func.id}" />', label: '<c:out value="${func.nome}" />' },
+            </c:forEach>
+        ];
+
         $(document).ready(function () {
-            $('.fmt-date').mask('00/00/0000');
-            $('.fmt-money').mask('000.000.000.000.000,00', { reverse: true });
+            $('.fmt-date').mask('0000-00-00');
+            $('.fmt-money').mask('000,000.00', { reverse: true });
             // date.split("/").reverse().join("-");
 
-            const selected = [
-
-            ];
-            const available = [
-                "ActionScript",
-                "AppleScript",
-                "Asp",
-                "BASIC",
-                "C",
-                "C++",
-                "Clojure",
-                "COBOL",
-                "ColdFusion",
-                "Erlang",
-                "Fortran",
-                "Groovy",
-                "Haskell",
-                "Java",
-                "JavaScript",
-                "Lisp",
-                "Perl",
-                "PHP",
-                "Python",
-                "Ruby",
-                "Scala",
-                "Scheme"
-            ];
-
-
-
-            $("#tags").autocomplete({
+            $("#input_funcionarios").autocomplete({
                 source: available,
                 select: (event, ui) => {
-                    var value = ui.item.value;
-                    selected.push(value);
+                    const item = ui.item;
+                    selected.push(item);
+                    const index = available.findIndex(el => el.value === item.value);
+                    available.splice(index, 1);
                     refreshDiv();
-                    var i = available.indexOf(value);
-                    available.splice(i, 1);
                     event.preventDefault();
-                    $("#tags").focusout();
-                    $("#tags").val('');
+                    $("#input_funcionarios").focusout();
+                    $("#input_funcionarios").val('');
                 }
             });
 
-            function refreshDiv() {
-                $("#emails").val(selected.join(','));
-                var email_html = selected.map(function (f, i) {
-                    return "<span class='btn btn-primary btn-md' style='margin: 3px;'>" + f + "&nbsp;&nbsp; <span onclick=\"removeEmail('" + f + "')\" style='color:red'>x</span></span>";
-                });
-                $("#email-html").html(email_html);
-            }
-
-            function removeEmail(email) {
-                availableTags.push(email);
-                var i = selected.indexOf(email);
-                selected.splice(i, 1);
-                refreshDiv();
-            }
-
-
-            // function split(val) {
-            //     return val.split(/,\s*/);
-            // }
-
-            // function extractLast(term) {
-            //     return split(term).pop();
-            // }
-
-            // $("#tags")
-            //     .on("keydown", function (event) {
-            //         if (event.keyCode === $.ui.keyCode.TAB &&
-            //             $(this).autocomplete("instance").menu.active) {
-            //             event.preventDefault();
-            //         }
-            //     })
-            //     .autocomplete({
-            //         minLength: 0,
-            //         source: function (request, response) {
-            //             response($.ui.autocomplete.filter(
-            //                 available, extractLast(request.term)));
-            //         },
-            //         focus: function () {
-            //             return false;
-            //         },
-            //         select: function (event, ui) {
-            //             var terms = split(this.value);
-            //             terms.pop();
-            //             terms.push(ui.item.value);
-            //             terms.push("");
-            //             this.value = terms.join(", ");
-            //             return false;
-            //         }
-            //     });
-
         });
+
+        function refreshDiv() {
+            $("#funcionarios-html").html(selected.map((item) => {
+                return "<span class='btn btn-secondary btn-md border border-primary' style='margin: 3px;'>" + item.label + "&nbsp;&nbsp; <span onclick=\"removeItem('" + item.value + "')\" style='color:black'>X</span></span>";
+            }));
+        }
+
+        function removeItem(value) {
+            const item = selected.find((item) => item.value === value);
+            if (item) {
+                available.push(item);
+                const index = selected.findIndex(el => el.value === value);
+                selected.splice(index, 1);
+            }
+            refreshDiv();
+        }
+
+        refreshDiv();
+
+        function cadastrar() {
+
+            const id = $("#input_id").val()
+            const nome = $("#input_nome").val()
+            const dataInicio = $("#input_data_inicio").val()
+            const dataPrevisaoFim = $("#input_data_previsao_fim").val()
+            const dataFim = $("#input_data_fim").val()
+            const orcamento = $("#input_orcamento").val()
+            const descricao = $("#textarea_descricao").val()
+            const gerente = $("#select_gerente").val()
+            const status = $("#select_status").val()
+            const risco = $("#select_risco").val()
+            const funcionarios = selected.map((item) => { return { id: item.value, nome: item.label } })
+
+            const projeto = {
+                id: id,
+                nome: nome,
+                dataInicio: dataInicio,
+                dataPrevisaoFim: dataPrevisaoFim,
+                dataFim: dataFim,
+                orcamento: orcamento && Number(orcamento),
+                descricao: descricao,
+                gerente: gerente && { id: gerente },
+                status: $("#select_status").val(),
+                // funcionarios: funcionarios
+            };
+
+            console.log(JSON.stringify(projeto));
+
+            if (id) {
+                $.ajax({
+                    url: "/api/projetos/" + id,
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify(projeto),
+                    success: function (data) {
+                        window.location.replace("/");
+                    }
+                })
+            } else {
+                $.ajax({
+                    url: "/api/projetos",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(projeto),
+                    success: function (data) {
+                        window.location.replace("/");
+                    }
+                });
+            }
+
+
+
+        }
+
     </script>
 
 </body>

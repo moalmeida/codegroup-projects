@@ -6,7 +6,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.mockito.Mockito.*;
 
-@TestPropertySource(locations = "classpath:application.properties")
+@TestPropertySource(locations = "classpath:test.properties")
 public class ServletInitializerTest {
 
     @Test

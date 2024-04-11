@@ -19,7 +19,7 @@ public class ProjetoTest {
         LocalDate dataFim = LocalDate.now();
         String descricao = "Test Description";
         String status = "In Progress";
-        Float orcamento = 1000.0f;
+        Double orcamento = 1000.0d;
         String risco = "Medium";
         Pessoa gerente = new Pessoa(1L, "Test Manager", LocalDate.now(), "123.456.789-00", true, true);
 
@@ -86,7 +86,7 @@ public class ProjetoTest {
         projeto.setStatus(status);
         assertEquals(status, projeto.getStatus());
 
-        Float orcamento = 1000.0f;
+        Double orcamento = 1000.0d;
         projeto.setOrcamento(orcamento);
         assertEquals(orcamento, projeto.getOrcamento());
 
@@ -106,7 +106,7 @@ public class ProjetoTest {
     @Test
     public void testToString() {
         Pessoa gerente = new Pessoa(1L, "Test Manager", LocalDate.now(), "123.456.789-00", true, true);
-        Projeto projeto = new Projeto(1L, "Test Project", LocalDate.now(), LocalDate.now().plusMonths(1), LocalDate.now(), "Test Description", "In Progress", 1000.0f, "Medium", gerente, new ArrayList<>());
+        Projeto projeto = new Projeto(1L, "Test Project", LocalDate.now(), LocalDate.now().plusMonths(1), LocalDate.now(), "Test Description", "In Progress", 1000.0d, "Medium", gerente, new ArrayList<>());
         String expected = "Projeto(id=1, nome=Test Project, dataInicio=" + LocalDate.now() + ", dataPrevisaoFim=" + LocalDate.now().plusMonths(1) + ", dataFim=" + LocalDate.now() + ", descricao=Test Description, status=In Progress, orcamento=1000.0, risco=Medium, gerente=" + gerente + ", funcionarios=[])";
         assertEquals(expected, projeto.toString());
     }
