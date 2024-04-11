@@ -34,24 +34,22 @@ public class PessoaController {
     }
 
     @PostMapping
-    public Pessoa addPessoa(@Valid @RequestBody Pessoa pessoa) {
-        return pessoaRepository.saveAndFlush(pessoa);
+    public Pessoa salvar(@Valid @RequestBody Pessoa pessoa) {
+        return pessoaRepository.save(pessoa);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @Valid @RequestBody Pessoa entrada) {
+    public ResponseEntity<Pessoa> atualizar(@PathVariable Long id, @Valid @RequestBody Pessoa entrada) {
         Pessoa entidade = this.pessoaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("not found for this id :: " + id));
-
         entidade.setNome(entrada.getNome());
-
-        this.pessoaRepository.saveAndFlush(entidade);
+        this.pessoaRepository.save(entidade);
         return ResponseEntity.status(201).body(entidade);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removerPessoa(@PathVariable Long id) {
+    public void remover(@PathVariable Long id) {
         pessoaRepository.deleteById(id);
     }
 

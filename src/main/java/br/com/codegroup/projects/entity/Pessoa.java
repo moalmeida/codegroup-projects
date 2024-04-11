@@ -1,6 +1,5 @@
 package br.com.codegroup.projects.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -19,6 +18,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "pessoa")
 public class Pessoa implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +26,6 @@ public class Pessoa implements Serializable {
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "datanascimento")

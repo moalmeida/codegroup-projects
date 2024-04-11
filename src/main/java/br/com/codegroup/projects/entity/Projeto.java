@@ -1,20 +1,22 @@
 package br.com.codegroup.projects.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,50 +24,65 @@ import java.util.List;
 @Entity
 @Table(name = "projeto")
 public class Projeto implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nome", nullable = false)
+    @NotNull
+    @Column(name = "nome", nullable = false, length = 200)
     private String nome;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "data_inicio")
     private LocalDate dataInicio;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "data_previsao_fim")
     private LocalDate dataPrevisaoFim;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "data_fim")
     private LocalDate dataFim;
 
-    @Column(name = "descricao")
+    @Column(name = "descricao", length = 5000)
     private String descricao;
 
-    @Column(name = "status")
+    @Column(name = "status", length = 45)
     private String status;
 
+    @Positive
     @Column(name = "orcamento")
-    private BigDecimal orcamento;
+    private Float orcamento;
 
-    @Column(name = "risco")
+    @Column(name = "risco", length = 45)
     private String risco;
 
     @ManyToOne
     @JoinColumn(name = "idgerente", nullable = false)
     private Pessoa gerente;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "membros", joinColumns = @JoinColumn(name = "idprojeto"), inverseJoinColumns = @JoinColumn(name = "idpessoa"))
+    private List<Pessoa> funcionarios = new ArrayList<>();
+
+    public void updateFrom(Projeto source) {
+        this.nome = source.nome;
+        this.dataInicio = source.dataInicio;
+        this.dataPrevisaoFim = source.dataPrevisaoFim;
+        this.dataFim = source.dataFim;
+        this.descricao = source.descricao;
+        this.status = source.status;
+        this.orcamento = source.orcamento;
+        this.risco = source.risco;
+        this.gerente = source.gerente;
+    }
+
     public boolean isPermitidoRemover() {
-        List<String> naoPermitido = List.of("iniciado", "em andamento", "encerrado");
-        return naoPermitido.stream().noneMatch(s -> s.equalsIgnoreCase(this.status));
+        return Stream.of("iniciado", "em andamento", "encerrado").noneMatch(s -> s.equalsIgnoreCase(this.status));
     }
 
 }

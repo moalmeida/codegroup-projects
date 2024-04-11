@@ -1,11 +1,15 @@
 package br.com.codegroup.projects.controller;
 
+import br.com.codegroup.projects.entity.Projeto;
 import br.com.codegroup.projects.repository.PessoaRepository;
 import br.com.codegroup.projects.repository.ProjetoRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -14,7 +18,6 @@ public class IndexController {
 
     private final ProjetoRepository projetoRepository;
     private final PessoaRepository pessoaRepository;
-
     private final List<String> status = List.of(
             "em análise",
             "análise realizada",
@@ -30,7 +33,6 @@ public class IndexController {
             "médio risco",
             "alto risco"
     );
-
 
     public IndexController(ProjetoRepository projetoRepository, PessoaRepository pessoaRepository) {
         this.projetoRepository = projetoRepository;
@@ -48,23 +50,30 @@ public class IndexController {
         return "projetos/list";
     }
 
-    @GetMapping("/projetos/cadastrar")
-    public String incluirProjeto(Model model) {
-        model.addAttribute("gerentes", this.pessoaRepository.findAllByGerente(true));
-        model.addAttribute("funcionarios", this.pessoaRepository.findAllByFuncionario(true));
-        model.addAttribute("status", status);
-        model.addAttribute("riscos", riscos);
-        return "projetos/edit";
+    @PostMapping("/projetos/cadastrar")
+    public String incluirProjeto(Model model, @Valid @RequestBody Projeto projeto) {
+        this.projetoRepository.save(projeto);
+        return "redirect:/projetos";
     }
 
-    @GetMapping("/projetos/cadastrar/:id")
+    @PostMapping("/projetos/remover/{id}")
+    public String removerProjeto(@PathVariable Long id) {
+        this.projetoRepository.deleteById(id);
+        return "redirect:/projetos";
+    }
+
+    @GetMapping({"/projetos/formulario", "/projetos/formulario/{id}"})
     public String alterarProjeto(Model model, @PathVariable Long id) {
-        model.addAttribute("gerentes", this.pessoaRepository.findAllByGerente(true));
-        model.addAttribute("funcionarios", this.pessoaRepository.findAllByFuncionario(true));
+        var projeto = this.projetoRepository.findById(id);
+        var gerentes = this.pessoaRepository.findAllByGerente(true);
+        var funcionarios = this.pessoaRepository.findAllByFuncionario(true);
+
+        model.addAttribute("gerentes", gerentes);
+        model.addAttribute("funcionarios", funcionarios);
         model.addAttribute("status", status);
         model.addAttribute("riscos", riscos);
-        model.addAttribute("projeto", this.projetoRepository.findById(id));
-        return "projetos/edit";
+        projeto.ifPresent(value -> model.addAttribute("projeto", value));
+        return "projetos/form";
     }
 
 

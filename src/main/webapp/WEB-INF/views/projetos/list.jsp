@@ -94,16 +94,35 @@
                                 </div>
                                 <div class="col-auto d-flex justify-content-between align-items-center">
                                     <span class="p-2">
-                                        <i class="bi bi-pen-fill" style="font-size: 1.75rem; color: green;"
-                                            data-bs-toggle="modal" data-bs-target="#projetoFormModal"></i>
+                                        <a href='/projetos/formulario/<c:out value="${projeto.id}"/>' class="bi bi-pen-fill" style="font-size: 1.75rem; color: green;"></a>
                                     </span>
                                     <c:if test="${projeto.permitidoRemover}">
                                         <span class="p-2">
                                             <i class="bi bi-trash" style="font-size: 1.75rem; color: red;"
-                                                data-bs-toggle="modal" data-bs-target="#projetoConfirmModal"></i>
+                                                data-bs-toggle="modal" data-bs-target='#confirmModal<c:out value="${projeto.id}"/>'>
+                                            </i>
                                         </span>
                                     </c:if>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='modal modal-lg' id='confirmModal<c:out value="${projeto.id}"/>' tabIndex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">remover projeto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                            </div>
+                            <div class="modal-body">
+                                tem certeza que gostaria de remover esse projeto?
+                            </div>
+                            <div class="modal-footer">
+                                <form action='/projetos/remover/<c:out value="${projeto.id}"/>' method="post">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="close">cancelar</button>
+                                    <button type="submit" class="btn btn-danger">confirmar</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -113,25 +132,7 @@
 
         </div>
     </div>
-    <div class='modal modal-lg' id="projetoConfirmModal" tabIndex="-1" aria-labelledby="projetoConfirmModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="projetoConfirmModalLabel">remover projeto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                </div>
-                <div class="modal-body">
-                    tem certeza que gostaria de remover esse projeto?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        aria-label="close">cancelar</button>
-                    <button type="button" class="btn btn-danger">confirmar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <footer class="bg-light text-left text-lg-start mt-5">
         <div class="text-left p-3">
             &copy; 2024 CodeGroup
@@ -139,6 +140,26 @@
     </footer>
     <script src="https://unpkg.com/jquery@3.7.1/dist/jquery.min.js" crossorigin></script>
     <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin></script>
+    <script>
+        $(document).ready(function () {
+
+            function handleRemover(projeto) {
+                window.alert("projeto id "+ projeto)
+                // $.ajax({
+                //     url: '/api/projeto/1',
+                //     method: 'DELETE',
+                //     success: function (response) {
+                //         // Handle the success response here
+                //     },
+                //     error: function (xhr, status, error) {
+                //         // Handle the error response here
+                //     }
+                // });
+            }
+
+        });
+    </script>
+
 </body>
 
 </html>

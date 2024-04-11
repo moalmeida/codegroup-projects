@@ -12,19 +12,15 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "membros")
+@IdClass(MembrosId.class)
 public class Membros implements Serializable {
 
-    @EmbeddedId
-    private MembrosId id;
+    @Id
+    @Column(name = "idprojeto")
+    private Long idProjeto;
 
-    @ManyToOne
-    @MapsId("idProjeto") // This maps the idProjeto attribute in MembrosId to this relationship
-    @JoinColumn(name = "idprojeto")
-    private Projeto projeto;
-
-    @ManyToOne
-    @MapsId("idPessoa") // This maps the idPessoa attribute in MembrosId to this relationship
-    @JoinColumn(name = "idpessoa")
-    private Pessoa pessoa;
+    @Id
+    @Column(name = "idpessoa")
+    private Long idPessoa;
 
 }

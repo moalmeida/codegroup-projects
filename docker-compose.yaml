@@ -1,15 +1,31 @@
 services:
-  postgres:
+  sonar:
+    image: sonarqube:lts-community
+    depends_on:
+      - db
+    environment:
+      - 'SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonar'
+      - 'SONAR_JDBC_USERNAME=sonar'
+      - 'SONAR_JDBC_PASSWORD=123456'
+    ports:
+      - 9000:9000
+  db:
     image: 'postgres:latest'
-    restart: always
+    container_name: db
+    hostname: db
+    environment:
+      - 'POSTGRES_DB=sonar'
+      - 'POSTGRES_USER=sonar'
+      - 'POSTGRES_PASSWORD=123456'
+    ports:
+      - 5433:5432
+  pg:
+    image: 'postgres:latest'
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres_volume:/var/lib/postgresql/data
     environment:
       - 'POSTGRES_DB=codegroup'
       - 'POSTGRES_USER=codegroup'
       - 'POSTGRES_PASSWORD=123456'
     ports:
-      - '5432:5432'
-volumes:
-  postgres_volume: {}
+      - 5432:5432
