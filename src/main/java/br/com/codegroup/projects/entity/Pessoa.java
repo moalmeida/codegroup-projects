@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-//@EqualsAndHashCode
 @Getter
 @Setter
 @Entity

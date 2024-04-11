@@ -1,15 +1,12 @@
 package br.com.codegroup.projects.controller;
 
-import br.com.codegroup.projects.entity.Projeto;
 import br.com.codegroup.projects.repository.PessoaRepository;
 import br.com.codegroup.projects.repository.ProjetoRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -18,21 +15,8 @@ public class IndexController {
 
     private final ProjetoRepository projetoRepository;
     private final PessoaRepository pessoaRepository;
-    private final List<String> status = List.of(
-            "em análise",
-            "análise realizada",
-            "análise aprovada",
-            "iniciado",
-            "planejado",
-            "em andamento",
-            "encerrado",
-            "cancelado"
-    );
-    private final List<String> riscos = List.of(
-            "baixo risco",
-            "médio risco",
-            "alto risco"
-    );
+    private final List<String> status = List.of("em análise", "análise realizada", "análise aprovada", "iniciado", "planejado", "em andamento", "encerrado", "cancelado");
+    private final List<String> riscos = List.of("baixo risco", "médio risco", "alto risco");
 
     public IndexController(ProjetoRepository projetoRepository, PessoaRepository pessoaRepository) {
         this.projetoRepository = projetoRepository;
