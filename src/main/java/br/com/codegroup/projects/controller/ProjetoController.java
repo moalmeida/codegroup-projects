@@ -13,9 +13,11 @@ import java.util.Optional;
 @RequestMapping("/api/projetos")
 public class ProjetoController {
 
-    @Autowired
-    private ProjetoRepository projetoRepository;
+    private final ProjetoRepository projetoRepository;
 
+    public ProjetoController(ProjetoRepository projetoRepository) {
+        this.projetoRepository = projetoRepository;
+    }
 
     @PostMapping
     public ResponseEntity<Projeto> salvar(@Valid @RequestBody Projeto projeto) {
