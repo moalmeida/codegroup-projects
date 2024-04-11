@@ -1,6 +1,5 @@
 <!-- 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 -->
 <!DOCTYPE html>
@@ -37,7 +36,7 @@
                     <input type="hidden" id="input_id" value='<c:out value="${projeto.id}" />' />
                     <div class="row">
                         <fieldset>
-                            <label class="form-label mt-4 fs-4" htmlFor="input_nome">
+                            <label class="form-label mt-4 fs-4" for="input_nome">
                                 nome
                             </label>
                             <input class="form-control fs-4" id="input_nome"
@@ -47,7 +46,7 @@
                     <div class="row">
                         <div class="col">
                             <fieldset>
-                                <label class="form-label mt-4 fs-4" htmlFor="input_data_inicio">
+                                <label class="form-label mt-4 fs-4" for="input_data_inicio">
                                     data de início
                                 </label>
                                 <input value='<c:out value="${projeto.dataInicio}" />'
@@ -56,7 +55,7 @@
                         </div>
                         <div class="col">
                             <fieldset>
-                                <label class="form-label mt-4 fs-4" htmlFor="select_gerente">
+                                <label class="form-label mt-4 fs-4" for="select_gerente">
                                     gerente responsavel
                                 </label>
                                 <select value='<c:out value="${projeto.gerente.id}"/>' class="form-select fs-4"
@@ -75,7 +74,7 @@
                     <div class="row">
                         <div class="col">
                             <fieldset>
-                                <label class="form-label mt-4 fs-4 " htmlFor="input_data_previsao_fim">
+                                <label class="form-label mt-4 fs-4 " for="input_data_previsao_fim">
                                     previsão de término
                                 </label>
                                 <input value='<c:out value=" ${projeto.dataPrevisaoFim}" />'
@@ -84,7 +83,7 @@
                         </div>
                         <div class="col">
                             <fieldset>
-                                <label class="form-label mt-4 fs-4" htmlFor="input_data_fim">
+                                <label class="form-label mt-4 fs-4" for="input_data_fim">
                                     data real de término
                                 </label>
                                 <input value='<c:out value=" ${projeto.dataFim}" />' class="form-control fs-4 fmt-date"
@@ -95,14 +94,14 @@
                     <div class="row">
                         <div class="col">
                             <fieldset>
-                                <label class="form-label mt-4 fs-4" htmlFor="input_orcamento">
+                                <label class="form-label mt-4 fs-4" for="input_orcamento">
                                     orçamento total
                                 </label>
                                 <input class="form-control fs-4 fmt-money" id="input_orcamento" type="text"
                                     value='<c:out value=" ${projeto.orcamento}" />' />
                             </fieldset>
                             <fieldset>
-                                <label class="form-label mt-4 fs-4" htmlFor="select_status">
+                                <label class="form-label mt-4 fs-4" for="select_status">
                                     status
                                 </label>
                                 <select value='<c:out value="${projeto.status}"/>' class="form-select fs-4"
@@ -119,21 +118,19 @@
                         </div>
                         <div class="col">
                             <fieldset>
-                                <label class="form-label mt-4 fs-4" htmlFor="textarea_descricao">
+                                <label class="form-label mt-4 fs-4" for="textarea_descricao">
                                     descrição
                                 </label>
-                                <textarea class="form-control fs-4" id="textarea_descricao" rows="5"
-                                    value='<c:out value="${projeto.descricao}"/>'></textarea>
+                                <textarea class="form-control fs-4" id="textarea_descricao" rows="5"><c:out value="${projeto.descricao}"/></textarea>
                             </fieldset>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label class="form-label mt-4 fs-4" htmlFor="select_risco">
+                            <label class="form-label mt-4 fs-4" for="select_risco">
                                 risco
                             </label>
-                            <select value='<c:out value="${projeto.risco}"/>' class="form-select fs-4"
-                                id="select_risco">
+                            <select value='<c:out value="${projeto.risco}"/>' class="form-select fs-4" id="select_risco">
                                 <option></option>
                                 <c:forEach var="rsc" items="${riscos}">
                                     <option value='<c:out value="${rsc}"/>' <c:if test="${rsc == projeto.risco}">
@@ -145,7 +142,7 @@
                         </div>
                         <div class="col">
                             <fieldset>
-                                <label class="form-label mt-4 fs-4" htmlFor="input_funcionarios">
+                                <label class="form-label mt-4 fs-4" for="input_funcionarios">
                                     funcionários
                                 </label>
                                 <input class="form-control fs-4" id="input_funcionarios" type="text" />
@@ -185,7 +182,7 @@
 
         $(document).ready(function () {
             $('.fmt-date').mask('0000-00-00');
-            $('.fmt-money').mask('000,000.00', { reverse: true });
+            //$('.fmt-money').mask('000,000.00', { reverse: true });
             // date.split("/").reverse().join("-");
 
             $("#input_funcionarios").autocomplete({
@@ -245,7 +242,8 @@
                 orcamento: orcamento && Number(orcamento),
                 descricao: descricao,
                 gerente: gerente && { id: gerente },
-                status: $("#select_status").val(),
+                status: status,
+                risco: risco,
                 // funcionarios: funcionarios
             };
 
