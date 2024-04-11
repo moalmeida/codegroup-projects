@@ -35,26 +35,21 @@
                 <form>
                     <input type="hidden" id="input_id" value='<c:out value="${projeto.id}" />' />
                     <div class="row">
-                        <fieldset>
                             <label class="form-label mt-4 fs-4" for="input_nome">
                                 nome
                             </label>
                             <input class="form-control fs-4" id="input_nome"
                                 value='<c:out value="${projeto.nome}" />'></input>
-                        </fieldset>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <fieldset>
                                 <label class="form-label mt-4 fs-4" for="input_data_inicio">
                                     data de início
                                 </label>
                                 <input value='<c:out value="${projeto.dataInicio}" />'
                                     class="form-control fs-4 fmt-date" id="input_data_inicio" type="text" />
-                            </fieldset>
                         </div>
                         <div class="col">
-                            <fieldset>
                                 <label class="form-label mt-4 fs-4" for="select_gerente">
                                     gerente responsavel
                                 </label>
@@ -68,39 +63,31 @@
                                         </option>
                                     </c:forEach>
                                 </select>
-                            </fieldset>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <fieldset>
                                 <label class="form-label mt-4 fs-4 " for="input_data_previsao_fim">
                                     previsão de término
                                 </label>
                                 <input value='<c:out value=" ${projeto.dataPrevisaoFim}" />'
                                     class="form-control fs-4 fmt-date" id="input_data_previsao_fim" type="text" />
-                            </fieldset>
                         </div>
                         <div class="col">
-                            <fieldset>
                                 <label class="form-label mt-4 fs-4" for="input_data_fim">
                                     data real de término
                                 </label>
                                 <input value='<c:out value=" ${projeto.dataFim}" />' class="form-control fs-4 fmt-date"
                                     id="input_data_fim" type="text" />
-                            </fieldset>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <fieldset>
                                 <label class="form-label mt-4 fs-4" for="input_orcamento">
                                     orçamento total
                                 </label>
                                 <input class="form-control fs-4 fmt-money" id="input_orcamento" type="text"
                                     value='<c:out value=" ${projeto.orcamento}" />' />
-                            </fieldset>
-                            <fieldset>
                                 <label class="form-label mt-4 fs-4" for="select_status">
                                     status
                                 </label>
@@ -114,15 +101,12 @@
                                         </option>
                                     </c:forEach>
                                 </select>
-                            </fieldset>
                         </div>
                         <div class="col">
-                            <fieldset>
                                 <label class="form-label mt-4 fs-4" for="textarea_descricao">
                                     descrição
                                 </label>
                                 <textarea class="form-control fs-4" id="textarea_descricao" rows="5"><c:out value="${projeto.descricao}"/></textarea>
-                            </fieldset>
                         </div>
                     </div>
                     <div class="row">
@@ -141,13 +125,11 @@
                             </select>
                         </div>
                         <div class="col">
-                            <fieldset>
                                 <label class="form-label mt-4 fs-4" for="input_funcionarios">
                                     funcionários
                                 </label>
                                 <input class="form-control fs-4" id="input_funcionarios" type="text" />
-                                <div id="funcionarios-html" class="mt-5"></div>
-                            </fieldset>
+                                <div id="funcionarios-html" class="mt-3"></div>
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse" style="padding-top: 70px; padding-bottom: 50px;">
