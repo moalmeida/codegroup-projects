@@ -8,9 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -20,7 +18,10 @@ import java.util.stream.Stream;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@ToString
+//@EqualsAndHashCode
+@Getter
+@Setter
 @Entity
 @Table(name = "projeto")
 public class Projeto implements Serializable {
@@ -68,18 +69,6 @@ public class Projeto implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "membros", joinColumns = @JoinColumn(name = "idprojeto"), inverseJoinColumns = @JoinColumn(name = "idpessoa"))
     private List<Pessoa> funcionarios = new ArrayList<>();
-
-    public void updateFrom(Projeto source) {
-        this.nome = source.nome;
-        this.dataInicio = source.dataInicio;
-        this.dataPrevisaoFim = source.dataPrevisaoFim;
-        this.dataFim = source.dataFim;
-        this.descricao = source.descricao;
-        this.status = source.status;
-        this.orcamento = source.orcamento;
-        this.risco = source.risco;
-        this.gerente = source.gerente;
-    }
 
     public boolean isPermitidoRemover() {
         return Stream.of("iniciado", "em andamento", "encerrado").noneMatch(s -> s.equalsIgnoreCase(this.status));

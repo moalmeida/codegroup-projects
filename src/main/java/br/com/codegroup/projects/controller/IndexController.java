@@ -62,7 +62,19 @@ public class IndexController {
         return "redirect:/projetos";
     }
 
-    @GetMapping({"/projetos/formulario", "/projetos/formulario/{id}"})
+    @GetMapping("/projetos/formulario")
+    public String criarProjeto(Model model) {
+        var gerentes = this.pessoaRepository.findAllByGerente(true);
+        var funcionarios = this.pessoaRepository.findAllByFuncionario(true);
+
+        model.addAttribute("gerentes", gerentes);
+        model.addAttribute("funcionarios", funcionarios);
+        model.addAttribute("status", status);
+        model.addAttribute("riscos", riscos);
+        return "projetos/form";
+    }
+
+    @GetMapping("/projetos/formulario/{id}")
     public String alterarProjeto(Model model, @PathVariable Long id) {
         var projeto = this.projetoRepository.findById(id);
         var gerentes = this.pessoaRepository.findAllByGerente(true);

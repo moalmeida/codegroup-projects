@@ -3,15 +3,16 @@ package br.com.codegroup.projects.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@ToString
+//@EqualsAndHashCode
+@Getter
+@Setter
 @Embeddable
 public class MembrosId implements Serializable {
 

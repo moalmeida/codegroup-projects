@@ -25,7 +25,7 @@
     <div class="container mt-5">
         <div class="row">
             <div>
-                <a href="/projetos/cadastrar" class="btn btn-primary mb-2">
+                <a href="/projetos/formulario" class="btn btn-primary mb-2">
                     cadastrar projeto
                 </a>
             </div>

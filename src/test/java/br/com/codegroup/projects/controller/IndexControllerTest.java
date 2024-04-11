@@ -1,5 +1,6 @@
 package br.com.codegroup.projects.controller;
 
+import br.com.codegroup.projects.entity.Pessoa;
 import br.com.codegroup.projects.entity.Projeto;
 import br.com.codegroup.projects.repository.PessoaRepository;
 import br.com.codegroup.projects.repository.ProjetoRepository;
@@ -10,7 +11,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -73,6 +76,22 @@ class IndexControllerTest {
 
         assertEquals("redirect:/projetos", viewName);
         verify(projetoRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    public void testCriarProjeto() {
+        List<Pessoa> gerentes = new ArrayList<>();
+        List<Pessoa> funcionarios = new ArrayList<>();
+        when(pessoaRepository.findAllByGerente(true)).thenReturn(gerentes);
+        when(pessoaRepository.findAllByFuncionario(true)).thenReturn(funcionarios);
+
+        String viewName = indexController.criarProjeto(model);
+
+        verify(pessoaRepository, times(1)).findAllByGerente(true);
+        verify(pessoaRepository, times(1)).findAllByFuncionario(true);
+        verify(model, times(1)).addAttribute("gerentes", gerentes);
+        verify(model, times(1)).addAttribute("funcionarios", funcionarios);
+        assertEquals("projetos/form", viewName);
     }
 
     @Test

@@ -1,15 +1,16 @@
 package br.com.codegroup.projects.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@ToString
+//@EqualsAndHashCode
+@Getter
+@Setter
 @Entity
 @Table(name = "membros")
 @IdClass(MembrosId.class)

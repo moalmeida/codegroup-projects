@@ -1,6 +1,5 @@
 package br.com.codegroup.projects.controller;
 
-import br.com.codegroup.projects.controller.exceptions.ResourceNotFoundException;
 import br.com.codegroup.projects.entity.Pessoa;
 import br.com.codegroup.projects.repository.PessoaRepository;
 import jakarta.validation.Valid;
@@ -9,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/pessoas")
@@ -40,11 +40,16 @@ public class PessoaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Pessoa> atualizar(@PathVariable Long id, @Valid @RequestBody Pessoa entrada) {
-        Pessoa entidade = this.pessoaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found for this id :: " + id));
-        entidade.setNome(entrada.getNome());
-        this.pessoaRepository.save(entidade);
-        return ResponseEntity.status(201).body(entidade);
+        Optional<Pessoa> entidade = this.pessoaRepository.findById(id);
+
+        if (entidade.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        entidade.get().setNome(entrada.getNome());
+
+        this.pessoaRepository.save(entidade.get());
+        return ResponseEntity.status(201).body(entidade.get());
     }
 
     @DeleteMapping("/{id}")

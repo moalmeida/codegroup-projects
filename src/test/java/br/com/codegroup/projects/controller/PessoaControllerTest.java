@@ -83,6 +83,17 @@ class PessoaControllerTest {
     }
 
     @Test
+    public void testAtualizarWhenEntidadeIsEmpty() {
+        Long id = 1L;
+        Pessoa pessoa = new Pessoa();
+        when(pessoaRepository.findById(id)).thenReturn(Optional.empty());
+
+        ResponseEntity<Pessoa> response = pessoaController.atualizar(id, pessoa);
+
+        assertEquals(ResponseEntity.notFound().build(), response);
+    }
+
+    @Test
     public void testRemover() {
         Long id = 1L;
 
