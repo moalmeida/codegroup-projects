@@ -38,7 +38,7 @@ public class Projeto {
     private String status;
     @Positive
     @Column(name = "orcamento")
-    private BigDecimal orcamento;
+    private Double orcamento;
     @Column(name = "risco", length = 45)
     private String risco;
     @ManyToOne

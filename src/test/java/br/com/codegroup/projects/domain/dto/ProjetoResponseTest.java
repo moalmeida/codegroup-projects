@@ -23,7 +23,7 @@ class ProjetoResponseTest {
         projetoResponse.setStatus("In Progress");
         projetoResponse.setGerente(new PessoaResponse(1L, "Test Manager", "01/01/1980", "123.456.789-00", true, true));
         projetoResponse.setFuncionario("Test Funcionario");
-        projetoResponse.setOrcamento(new BigDecimal("1000.0"));
+        projetoResponse.setOrcamento(1000d);
         projetoResponse.setRisco("Medium");
         projetoResponse.setFuncionarios(Collections.singletonList(new PessoaResponse(2L, "Test Funcionario", "01/01/1980", "123.456.789-01", false, true)));
         projetoResponse.setPermitidoRemover(true);

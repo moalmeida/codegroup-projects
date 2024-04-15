@@ -28,7 +28,7 @@ class ProjetoAdapterTest {
         projeto.setDataFim(LocalDate.now());
         projeto.setDescricao("Test Description");
         projeto.setStatus("In Progress");
-        projeto.setOrcamento(new BigDecimal(1000.0));
+        projeto.setOrcamento(1000d);
         projeto.setRisco("Medium");
 
         Pessoa gerente = new Pessoa(1L, "Test Manager", LocalDate.now(), "123.456.789-00", true, true);
@@ -59,7 +59,7 @@ class ProjetoAdapterTest {
         projeto1.setDataFim(LocalDate.now());
         projeto1.setDescricao("Test Description 1");
         projeto1.setStatus("In Progress");
-        projeto1.setOrcamento(new BigDecimal(1000.0));
+        projeto1.setOrcamento(1000d);
         projeto1.setRisco("Medium");
         Pessoa gerente1 = new Pessoa(1L, "Test Manager 1", LocalDate.now(), "123.456.789-01", true, true);
         projeto1.setGerente(gerente1);
@@ -73,7 +73,7 @@ class ProjetoAdapterTest {
         projeto2.setDataFim(LocalDate.now());
         projeto2.setDescricao("Test Description 2");
         projeto2.setStatus("Completed");
-        projeto2.setOrcamento(new BigDecimal(2000.0));
+        projeto2.setOrcamento(2000d);
         projeto2.setRisco("Low");
         Pessoa gerente2 = new Pessoa(2L, "Test Manager 2", LocalDate.now(), "123.456.789-02", true, true);
         projeto2.setGerente(gerente2);

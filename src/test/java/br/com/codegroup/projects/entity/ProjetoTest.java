@@ -20,7 +20,7 @@ class ProjetoTest {
         LocalDate dataFim = LocalDate.now();
         String descricao = "Test Description";
         String status = "In Progress";
-        BigDecimal orcamento = new BigDecimal(1000.0);
+        Double orcamento = 1000d;
         String risco = "Medium";
 
         Pessoa gerente = new Pessoa(1L, "#gerente", LocalDate.now(), "123.456.789-00", true, true);
@@ -72,7 +72,7 @@ class ProjetoTest {
         projeto.setStatus(status);
         assertEquals(status, projeto.getStatus());
 
-        BigDecimal orcamento = new BigDecimal(1000.0);
+        Double orcamento = 1000d;
         projeto.setOrcamento(orcamento);
         assertEquals(orcamento, projeto.getOrcamento());
 

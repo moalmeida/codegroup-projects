@@ -20,7 +20,7 @@ public class ProjetoResponse {
     private String status;
     private PessoaResponse gerente;
     private String funcionario;
-    private BigDecimal orcamento;
+    private Double orcamento;
     private String risco;
     private List<PessoaResponse> funcionarios;
     private boolean permitidoRemover;

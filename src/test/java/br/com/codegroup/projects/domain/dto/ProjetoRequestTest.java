@@ -21,7 +21,7 @@ class ProjetoRequestTest {
         projetoRequest.setStatus("In Progress");
         projetoRequest.setGerente(1L);
         projetoRequest.setFuncionario("Test Funcionario");
-        projetoRequest.setOrcamento(new BigDecimal(1000.0));
+        projetoRequest.setOrcamento(1000d);
         projetoRequest.setRisco("Medium");
         projetoRequest.setFuncionarios("Test Funcionarios");
 

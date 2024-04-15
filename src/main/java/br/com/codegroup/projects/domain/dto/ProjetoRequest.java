@@ -21,7 +21,7 @@ public class ProjetoRequest {
     private String status;
     private Long gerente;
     private String funcionario;
-    private BigDecimal orcamento;
+    private Double orcamento;
     private String risco;
     private String funcionarios;
 }
