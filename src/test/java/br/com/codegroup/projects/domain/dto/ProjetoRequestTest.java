@@ -34,7 +34,7 @@ class ProjetoRequestTest {
         assertEquals("In Progress", projetoRequest.getStatus());
         assertEquals(1L, projetoRequest.getGerente());
         assertEquals("Test Funcionario", projetoRequest.getFuncionario());
-        assertEquals(new BigDecimal(1000.0), projetoRequest.getOrcamento());
+        assertEquals(1000d, projetoRequest.getOrcamento());
         assertEquals("Medium", projetoRequest.getRisco());
         assertEquals("Test Funcionarios", projetoRequest.getFuncionarios());
     }

@@ -37,7 +37,7 @@ class ProjetoResponseTest {
         assertEquals("In Progress", projetoResponse.getStatus());
         assertEquals(1L, projetoResponse.getGerente().getId());
         assertEquals("Test Funcionario", projetoResponse.getFuncionario());
-        assertEquals(new BigDecimal("1000.0"), projetoResponse.getOrcamento());
+        assertEquals(1000d, projetoResponse.getOrcamento());
         assertEquals("Medium", projetoResponse.getRisco());
         assertEquals(1, projetoResponse.getFuncionarios().size());
         assertEquals(2L, projetoResponse.getFuncionarios().get(0).getId());
