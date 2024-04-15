@@ -108,6 +108,22 @@ class PessoaControllerTest {
     }
 
     @Test
+    void atualizarSemObjeto() {
+        Long id = 1L;
+        PessoaRequest request = new PessoaRequest();
+        request.setNome("#pessoa");
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome("#pessoa");
+
+        when(pessoaRepository.buscarPorId(id)).thenReturn(Optional.empty());
+
+        ResponseEntity<PessoaResponse> response = pessoaController.atualizar(id, request);
+
+        assertEquals(404, response.getStatusCodeValue());
+    }
+
+
+    @Test
     void removerPorId() {
         Long id = 1L;
         Pessoa pessoa = new Pessoa();
