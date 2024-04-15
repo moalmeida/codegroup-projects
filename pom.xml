@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.4</version>
-        <relativePath />
+        <relativePath/>
     </parent>
     <groupId>br.com.codegroup</groupId>
     <artifactId>projects</artifactId>
@@ -28,7 +28,7 @@
         <sonar.sources>src/main</sonar.sources>
         <sonar.tests>src/test</sonar.tests>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
-        <sonar.coverage.jacoco.xmlReportPaths>target/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
     <dependencies>
         <!-- WEB/CORE -->
@@ -140,30 +140,6 @@
                         </rule>
                     </rules>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/jacoco</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -205,6 +181,7 @@
                             </execution>
                             <execution>
                                 <id>report</id>
+                                <phase>prepare-package</phase>
                                 <goals>
                                     <goal>report</goal>
                                 </goals>
