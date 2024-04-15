@@ -1,26 +1,26 @@
 package br.com.codegroup.projects.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Getter
 @Setter
 @Entity
 @Table(name = "membros")
-@IdClass(MembrosId.class)
-public class Membros implements Serializable {
-
-    @Id
-    @Column(name = "idprojeto")
-    private Long idProjeto;
-
-    @Id
-    @Column(name = "idpessoa")
-    private Long idPessoa;
-
+public class Membros {
+    @EmbeddedId
+    private MembrosId id;
+    @ManyToOne
+    @MapsId("idprojeto")
+    @JoinColumn(name = "idprojeto")
+    private Projeto projeto;
+    @ManyToOne
+    @MapsId("idpessoa")
+    @JoinColumn(name = "idpessoa")
+    private Pessoa pessoa;
 }

@@ -1,5 +1,8 @@
 package br.com.codegroup.projects.controller;
 
+import br.com.codegroup.projects.domain.adapter.PessoaAdapter;
+import br.com.codegroup.projects.domain.dto.PessoaRequest;
+import br.com.codegroup.projects.domain.dto.PessoaResponse;
 import br.com.codegroup.projects.entity.Pessoa;
 import br.com.codegroup.projects.repository.PessoaRepository;
 import jakarta.validation.Valid;
@@ -7,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,46 +21,73 @@ public class PessoaController {
 
     private final PessoaRepository pessoaRepository;
 
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final PessoaAdapter pessoaAdapter = new PessoaAdapter();
+
     public PessoaController(PessoaRepository pessoaRepository) {
         this.pessoaRepository = pessoaRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<Pessoa>> buscarTodos() {
-        List<Pessoa> pessoas = pessoaRepository.findAll();
-        return ResponseEntity.ok(pessoas);
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<PessoaResponse>> buscarTodos() {
+        List<Pessoa> pessoas = pessoaRepository.buscarTodos();
+        var response = pessoaAdapter.transformarPessoasResponse(pessoas);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pessoa> buscarPorId(@PathVariable Long id) {
-        return pessoaRepository.findById(id)
-                .map(ResponseEntity::ok)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<PessoaResponse> buscarPorId(@PathVariable Long id) {
+        return pessoaRepository
+                .buscarPorId(id)
+                .map(pessoa -> ResponseEntity.ok(pessoaAdapter.transformarPessoaResponse(pessoa)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Pessoa salvar(@Valid @RequestBody Pessoa pessoa) {
-        return pessoaRepository.save(pessoa);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<PessoaResponse> salvar(@Valid @RequestBody PessoaRequest request) {
+        var dataNascimento = request.getDataNascimento() != null ? LocalDate.parse(request.getDataNascimento(), formatter) : null;
+        var pessoa = new Pessoa();
+
+        pessoa.setNome(request.getNome());
+        pessoa.setCpf(request.getCpf());
+        pessoa.setDataNascimento(dataNascimento);
+        pessoa.setGerente(request.getGerente());
+        pessoa.setFuncionario(request.getFuncionario());
+
+        var response = pessoaAdapter.transformarPessoaResponse(pessoaRepository.salvar(pessoa));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pessoa> atualizar(@PathVariable Long id, @Valid @RequestBody Pessoa entrada) {
-        Optional<Pessoa> entidade = this.pessoaRepository.findById(id);
-
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<PessoaResponse> atualizar(@PathVariable Long id, @Valid @RequestBody PessoaRequest request) {
+        Optional<Pessoa> entidade = pessoaRepository.buscarPorId(id);
         if (entidade.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        var dataNascimento = request.getDataNascimento() != null ? LocalDate.parse(request.getDataNascimento(), formatter) : null;
+        var pessoa = entidade.get();
 
-        entidade.get().setNome(entrada.getNome());
+        pessoa.setNome(request.getNome());
+        pessoa.setCpf(request.getCpf());
+        pessoa.setDataNascimento(dataNascimento);
+        pessoa.setGerente(request.getGerente());
+        pessoa.setFuncionario(request.getFuncionario());
 
-        this.pessoaRepository.save(entidade.get());
-        return ResponseEntity.status(201).body(entidade.get());
+        var response = pessoaAdapter.transformarPessoaResponse(pessoaRepository.salvar(pessoa));
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long id) {
-        pessoaRepository.deleteById(id);
+    public ResponseEntity<Void> removerPorId(@PathVariable Long id) {
+        pessoaRepository.removerPorId(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

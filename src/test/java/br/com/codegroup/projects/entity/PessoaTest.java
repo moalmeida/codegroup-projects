@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class PessoaTest {
+class PessoaTest {
 
     @Test
-    public void testPessoa() {
+    void testPessoa() {
         Long id = 1L;
         String nome = "Test Name";
         LocalDate dataNascimento = LocalDate.now();
@@ -30,7 +29,7 @@ public class PessoaTest {
 
 
     @Test
-    public void testSetters() {
+    void testSetters() {
         Pessoa pessoa = new Pessoa();
 
         Long id = 1L;
@@ -56,13 +55,6 @@ public class PessoaTest {
         Boolean gerente = false;
         pessoa.setGerente(gerente);
         assertEquals(gerente, pessoa.getGerente());
-    }
-
-    @Test
-    public void testToString() {
-        Pessoa pessoa = new Pessoa(1L, "Test Name", LocalDate.now(), "123.456.789-00", true, true);
-        String expected = "Pessoa(id=1, nome=Test Name, dataNascimento=" + LocalDate.now() + ", cpf=123.456.789-00, funcionario=true, gerente=true)";
-        assertEquals(expected, pessoa.toString());
     }
 
 

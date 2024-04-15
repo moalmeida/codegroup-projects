@@ -2,14 +2,14 @@ package br.com.codegroup.projects;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestPropertySource(locations = "classpath:test.properties")
-public class ApplicationTest {
+class ApplicationTest {
 
     @Test
-    public void contextLoads() {
+    void main() {
+        Application.main(new String[]{});
     }
-
 }

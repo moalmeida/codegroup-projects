@@ -1,21 +1,27 @@
 package br.com.codegroup.projects.controller;
 
+import br.com.codegroup.projects.domain.dto.PessoaRequest;
+import br.com.codegroup.projects.domain.dto.PessoaResponse;
 import br.com.codegroup.projects.entity.Pessoa;
+import br.com.codegroup.projects.repository.MembrosRepository;
 import br.com.codegroup.projects.repository.PessoaRepository;
+import br.com.codegroup.projects.repository.ProjetoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 class PessoaControllerTest {
 
@@ -23,84 +29,94 @@ class PessoaControllerTest {
     PessoaController pessoaController;
 
     @Mock
+    ProjetoRepository projetoRepository;
+
+    @Mock
     PessoaRepository pessoaRepository;
 
+    @Mock
+    MembrosRepository membrosRepository;
+
+    @Mock
+    Model model;
+
     @BeforeEach
-    public void init() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testBuscarTodos() {
-        Pessoa pessoa1 = new Pessoa();
-        Pessoa pessoa2 = new Pessoa();
-        when(pessoaRepository.findAll()).thenReturn(Arrays.asList(pessoa1, pessoa2));
-
-        ResponseEntity<List<Pessoa>> response = pessoaController.buscarTodos();
-
-        assertEquals(2, Objects.requireNonNull(response.getBody()).size());
-        verify(pessoaRepository, times(1)).findAll();
-    }
 
     @Test
-    public void testBuscarPorId() {
+    void buscarTodos() {
+        List<Pessoa> pessoas = new ArrayList<>();
         Pessoa pessoa = new Pessoa();
-        when(pessoaRepository.findById(1L)).thenReturn(Optional.of(pessoa));
+        pessoa.setNome("#pessoa");
+        pessoas.add(pessoa);
 
-        ResponseEntity<Pessoa> response = pessoaController.buscarPorId(1L);
+        when(pessoaRepository.buscarTodos()).thenReturn(pessoas);
 
-        assertEquals(pessoa, response.getBody());
-        verify(pessoaRepository, times(1)).findById(1L);
+        ResponseEntity<List<PessoaResponse>> response = pessoaController.buscarTodos();
+
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
     }
 
     @Test
-    public void testSalvar() {
-        Pessoa pessoa = new Pessoa();
-        when(pessoaRepository.save(any(Pessoa.class))).thenReturn(pessoa);
-
-        Pessoa response = pessoaController.salvar(pessoa);
-
-        assertEquals(pessoa, response);
-        verify(pessoaRepository, times(1)).save(any(Pessoa.class));
-    }
-
-    @Test
-    public void testAtualizar() {
-        Pessoa entrada = new Pessoa();
-        entrada.setNome("Updated Name");
-
-        Pessoa entidade = new Pessoa();
-        entidade.setNome("Old Name");
-
-        when(pessoaRepository.findById(1L)).thenReturn(Optional.of(entidade));
-        when(pessoaRepository.save(any(Pessoa.class))).thenReturn(entrada);
-
-        ResponseEntity<Pessoa> response = pessoaController.atualizar(1L, entrada);
-
-        assertEquals(entrada.getNome(), Objects.requireNonNull(response.getBody()).getNome());
-        verify(pessoaRepository, times(1)).findById(1L);
-        verify(pessoaRepository, times(1)).save(any(Pessoa.class));
-    }
-
-    @Test
-    public void testAtualizarWhenEntidadeIsEmpty() {
+    void buscarPorId() {
         Long id = 1L;
         Pessoa pessoa = new Pessoa();
-        when(pessoaRepository.findById(id)).thenReturn(Optional.empty());
+        pessoa.setNome("#pessoa");
 
-        ResponseEntity<Pessoa> response = pessoaController.atualizar(id, pessoa);
+        when(pessoaRepository.buscarPorId(id)).thenReturn(Optional.of(pessoa));
 
-        assertEquals(ResponseEntity.notFound().build(), response);
+        ResponseEntity<PessoaResponse> response = pessoaController.buscarPorId(id);
+
+        assertNotNull(response.getBody());
+        assertEquals("#pessoa", response.getBody().getNome());
     }
 
     @Test
-    public void testRemover() {
-        Long id = 1L;
+    void salvar() {
+        PessoaRequest request = new PessoaRequest();
+        request.setNome("#pessoa");
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome("#pessoa");
 
-        doNothing().when(pessoaRepository).deleteById(id);
-        pessoaController.remover(id);
+        when(pessoaRepository.salvar(any(Pessoa.class))).thenReturn(pessoa);
 
-        verify(pessoaRepository, times(1)).deleteById(id);
+        ResponseEntity<PessoaResponse> response = pessoaController.salvar(request);
+
+        assertNotNull(response.getBody());
+        assertEquals("#pessoa", response.getBody().getNome());
     }
 
+    @Test
+    void atualizar() {
+        Long id = 1L;
+        PessoaRequest request = new PessoaRequest();
+        request.setNome("#pessoa");
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome("#pessoa");
+
+        when(pessoaRepository.buscarPorId(id)).thenReturn(Optional.of(pessoa));
+        when(pessoaRepository.salvar(any(Pessoa.class))).thenReturn(pessoa);
+
+        ResponseEntity<PessoaResponse> response = pessoaController.atualizar(id, request);
+
+        assertNotNull(response.getBody());
+        assertEquals("#pessoa", response.getBody().getNome());
+    }
+
+    @Test
+    void removerPorId() {
+        Long id = 1L;
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome("#pessoa");
+
+        when(pessoaRepository.buscarPorId(id)).thenReturn(Optional.of(pessoa));
+
+        var response = pessoaController.removerPorId(id);
+
+        assertEquals(204, response.getStatusCodeValue());
+    }
 }

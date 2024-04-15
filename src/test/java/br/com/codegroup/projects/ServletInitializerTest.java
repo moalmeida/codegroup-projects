@@ -2,15 +2,13 @@ package br.com.codegroup.projects;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.mockito.Mockito.*;
 
-@TestPropertySource(locations = "classpath:test.properties")
-public class ServletInitializerTest {
+class ServletInitializerTest {
 
     @Test
-    public void testConfigure() {
+    void configure() {
         SpringApplicationBuilder builder = mock(SpringApplicationBuilder.class);
         ServletInitializer servletInitializer = new ServletInitializer();
         servletInitializer.configure(builder);

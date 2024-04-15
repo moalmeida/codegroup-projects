@@ -1,50 +1,121 @@
 package br.com.codegroup.projects.controller;
 
+import br.com.codegroup.projects.domain.adapter.PessoaAdapter;
+import br.com.codegroup.projects.domain.adapter.ProjetoAdapter;
+import br.com.codegroup.projects.domain.dto.ProjetoRequest;
+import br.com.codegroup.projects.entity.Membros;
+import br.com.codegroup.projects.entity.MembrosId;
+import br.com.codegroup.projects.entity.Pessoa;
 import br.com.codegroup.projects.entity.Projeto;
+import br.com.codegroup.projects.repository.MembrosRepository;
+import br.com.codegroup.projects.repository.PessoaRepository;
 import br.com.codegroup.projects.repository.ProjetoRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-@RestController
-@RequestMapping("/api/projetos")
+@Controller
+@RequestMapping("/projetos")
 public class ProjetoController {
 
+    private final PessoaRepository pessoaRepository;
     private final ProjetoRepository projetoRepository;
+    private final MembrosRepository membrosRepository;
 
-    public ProjetoController(ProjetoRepository projetoRepository) {
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final PessoaAdapter pessoaAdapter = new PessoaAdapter();
+    private final ProjetoAdapter projetoAdapter = new ProjetoAdapter();
+
+    public ProjetoController(PessoaRepository pessoaRepository, ProjetoRepository projetoRepository, MembrosRepository membrosRepository) {
+        this.pessoaRepository = pessoaRepository;
         this.projetoRepository = projetoRepository;
+        this.membrosRepository = membrosRepository;
     }
 
-    @PostMapping
-    public ResponseEntity<Projeto> salvar(@Valid @RequestBody Projeto projeto) {
-        return ResponseEntity.status(201).body(projetoRepository.save(projeto));
+    @GetMapping
+    public String buscarTodos(Model model) {
+        var projetos = projetoRepository.buscarTodos();
+        model.addAttribute("projetos", projetoAdapter.transformarProjetosResponse(projetos));
+        return "projetos/list";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Projeto> atualizar(@PathVariable Long id, @Valid @RequestBody Projeto entrada) {
-        Optional<Projeto> entidade = this.projetoRepository.findById(id);
+    @PostMapping("/remover/{id}")
+    public String removerPorId(@PathVariable Long id) {
+        membrosRepository.deletarTodosPorProjeto(id);
+        projetoRepository.removerPorId(id);
+        return "redirect:/projetos";
+    }
 
-        if (entidade.isEmpty()) {
-            return ResponseEntity.notFound().build();
+
+    @PostMapping(value = "/cadastrar", consumes = "application/x-www-form-urlencoded;charset=UTF-8")
+    public String salvar(@ModelAttribute ProjetoRequest request) {
+        var gerente = pessoaRepository.buscarPorId(request.getGerente()).orElse(null);
+        var dataInicio = request.getDataInicio() != null && !request.getDataInicio().isEmpty() ? LocalDate.parse(request.getDataInicio(), formatter) : null;
+        var dataPrevisaoFim = request.getDataPrevisaoFim() != null && !request.getDataPrevisaoFim().isEmpty() ? LocalDate.parse(request.getDataPrevisaoFim(), formatter) : null;
+        var dataFim = request.getDataFim() != null && !request.getDataFim().isEmpty() ? LocalDate.parse(request.getDataFim(), formatter) : null;
+        var projeto = projetoRepository.buscarPorId(request.getId()).orElseGet(Projeto::new);
+
+        projeto.setNome(request.getNome());
+        projeto.setDescricao(request.getDescricao());
+        projeto.setGerente(gerente);
+        projeto.setDataInicio(dataInicio);
+        projeto.setDataPrevisaoFim(dataPrevisaoFim);
+        projeto.setDataFim(dataFim);
+        projeto.setStatus(request.getStatus());
+        projeto.setOrcamento(request.getOrcamento());
+        projeto.setRisco(request.getRisco());
+
+        projetoRepository.salvar(projeto);
+
+        var funcionarioIds = new ArrayList<Long>();
+        if (request.getFuncionarios() != null && !request.getFuncionarios().isEmpty()) {
+            funcionarioIds.addAll(Arrays.stream(request.getFuncionarios().split(",")).map(Long::valueOf).toList());
         }
+        var membros = new ArrayList<Membros>();
+        for (Long id : funcionarioIds) {
+            var membrosId = new MembrosId(projeto.getId(), id);
+            var membrosPessoa = new Pessoa(id);
+            membros.add(new Membros(membrosId, projeto, membrosPessoa));
+        }
+        membrosRepository.deletarTodosPorProjeto(projeto.getId());
+        membrosRepository.salvarTodos(membros);
 
-        entidade.get().setNome(entrada.getNome());
-        entidade.get().setDataInicio(entrada.getDataInicio());
-        entidade.get().setDataPrevisaoFim(entrada.getDataPrevisaoFim());
-        entidade.get().setDataFim(entrada.getDataFim());
-        entidade.get().setDescricao(entrada.getDescricao());
-        entidade.get().setStatus(entrada.getStatus());
-        entidade.get().setOrcamento(entrada.getOrcamento());
-        entidade.get().setRisco(entrada.getRisco());
-        entidade.get().setGerente(entrada.getGerente());
-
-        this.projetoRepository.save(entidade.get());
-        return ResponseEntity.status(201).body(entidade.get());
+        return "redirect:/projetos";
     }
 
+    @GetMapping("/cadastrar")
+    public String formulario(Model model) {
+        var gerentes = pessoaRepository.buscarTodosGerentes();
+        var funcionarios = pessoaRepository.buscarTodosFuncionarios();
+        var status = projetoRepository.buscarStatus();
+        var riscos = projetoRepository.buscarRiscos();
+
+        model.addAttribute("gerentes", pessoaAdapter.transformarPessoasResponse(gerentes));
+        model.addAttribute("funcionarios", pessoaAdapter.transformarPessoasResponse(funcionarios));
+        model.addAttribute("status", status);
+        model.addAttribute("riscos", riscos);
+        return "projetos/form";
+    }
+
+    @GetMapping("/cadastrar/{id}")
+    public String formularioAlterar(Model model, @PathVariable Long id) {
+        var gerentes = pessoaRepository.buscarTodosGerentes();
+        var funcionarios = pessoaRepository.buscarTodosFuncionarios();
+        var status = projetoRepository.buscarStatus();
+        var riscos = projetoRepository.buscarRiscos();
+        var projeto = projetoRepository.buscarPorId(id);
+
+        projeto.ifPresent(value -> model.addAttribute("projeto", projetoAdapter.transformarProjetoResponse(value)));
+        model.addAttribute("gerentes", pessoaAdapter.transformarPessoasResponse(gerentes));
+        model.addAttribute("funcionarios", pessoaAdapter.transformarPessoasResponse(funcionarios));
+        model.addAttribute("status", status);
+        model.addAttribute("riscos", riscos);
+        return "projetos/form";
+    }
 
 }

@@ -1,14 +1,13 @@
-<!--
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
--->
+
 <!DOCTYPE html>
 <html lang="pt_br">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title> :: listar projetos :: </title>
     <link href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://unpkg.com/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
@@ -24,29 +23,41 @@
 <div class="container mt-5">
     <div class="row">
         <div>
-            <a href="/projetos/formulario" class="btn btn-primary mb-2">
+            <c:url var="cadastrarLink" value="/projetos/cadastrar" />
+            <a href="${cadastrarLink}" class="btn btn-primary mb-2">
                 cadastrar projeto
             </a>
         </div>
     </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 pt-5">
+        <c:if test="${empty projetos}">
+            <div class="col">
+                <div class="card card-hover">
+                    <div class="card-body">
+                        <h4 class="pt-4 pb-2 text-truncate-line-2">
+                            nenhum projeto cadastrado
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </c:if>
         <c:forEach var="projeto" items="${projetos}">
             <div class="col h-100">
                 <div class="card card-hover">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center pt-1">
                                 <span class="badge bg-primary fs-5">
-                                    <c:out value="${projeto.status}"/>
+                                    ${projeto.status}
                                 </span>
                             <span class="badge bg-primary fs-5">
-                                    <c:out value="${projeto.risco}"/>
+                                    ${projeto.risco}
                                 </span>
                         </div>
                         <h4 class="pt-4 pb-2 text-truncate-line-2">
-                            <c:out value="${projeto.nome}"/>
+                            ${projeto.nome}
                         </h4>
                         <h5 class="pb-2 text-truncate-line-2">
-                            <c:out value="${projeto.descricao}"/>
+                            ${projeto.descricao}
                         </h5>
                         <div class="pb-2 fs-5 d-flex justify-content-between">
                             <div class=" d-flex align-items-center">
@@ -54,7 +65,7 @@
                                 <span class="p-2">orçamento</span>
                             </div>
                             <div>
-                                <c:out value="${projeto.orcamento}"/>
+                                ${projeto.orcamento}
                             </div>
                         </div>
                         <div class="pb-2 fs-5 d-flex justify-content-between">
@@ -63,7 +74,7 @@
                                 <span class="p-2">data de início</span>
                             </div>
                             <div>
-                                <c:out value="${projeto.dataInicio}"/>
+                                ${projeto.dataInicio}
                             </div>
                         </div>
                         <div class="pb-2 fs-5 d-flex justify-content-between">
@@ -72,7 +83,7 @@
                                 <span class="p-2">previsão de término</span>
                             </div>
                             <div>
-                                <c:out value="${projeto.dataPrevisaoFim}"/>
+                                ${projeto.dataPrevisaoFim}
                             </div>
                         </div>
                         <div class="pb-2 fs-5 d-flex justify-content-between">
@@ -81,7 +92,7 @@
                                 <span class="p-2">data de término</span>
                             </div>
                             <div>
-                                <c:out value="${projeto.dataFim}"/>
+                                ${projeto.dataFim}
                             </div>
                         </div>
                     </div>
@@ -89,27 +100,27 @@
                         <div class="row align-items-center g-0">
                             <div class="col">
                                 <i class="bi bi-person-badge" style="font-size: 1.75rem; color: blue;"></i>
-                                <c:out value="${projeto.gerente.nome}"/>
+                                    ${projeto.gerente.nome}
                             </div>
                             <div class="col-auto d-flex justify-content-between align-items-center">
                                     <span class="p-2">
-                                        <a href='/projetos/formulario/<c:out value="${projeto.id}"/>'
-                                           class="bi bi-pen-fill" style="font-size: 1.75rem; color: green;"></a>
+                                        <c:url var="cadastrarLink" value="/projetos/cadastrar/${projeto.id}" />
+                                        <a href="${cadastrarLink}" class="bi bi-pen-fill" style="font-size: 1.75rem; color: green;"></a>
                                     </span>
-                                <c:if test="${projeto.permitidoRemover}">
+                                   <c:if test="${projeto.permitidoRemover}">
                                         <span class="p-2">
                                             <i class="bi bi-trash" style="font-size: 1.75rem; color: red;"
                                                data-bs-toggle="modal"
-                                               data-bs-target='#confirmModal<c:out value="${projeto.id}"/>'>
+                                               data-bs-target='#confirmModal${projeto.id}'>
                                             </i>
                                         </span>
-                                </c:if>
+                                    </c:if>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class='modal modal-lg' id='confirmModal<c:out value="${projeto.id}"/>' tabIndex="-1"
+            <div class='modal modal-lg' id='confirmModal${projeto.id}' tabIndex="-1"
                  aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -121,7 +132,7 @@
                             tem certeza que gostaria de remover esse projeto?
                         </div>
                         <div class="modal-footer">
-                            <form action='/projetos/remover/<c:out value="${projeto.id}"/>' method="post">
+                            <form action='/projetos/remover/${projeto.id}' method="post">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                         aria-label="close">cancelar
                                 </button>
@@ -132,8 +143,6 @@
                 </div>
             </div>
         </c:forEach>
-
-
     </div>
 </div>
 

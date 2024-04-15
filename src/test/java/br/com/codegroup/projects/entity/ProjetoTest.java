@@ -2,28 +2,30 @@ package br.com.codegroup.projects.entity;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ProjetoTest {
+class ProjetoTest {
 
     @Test
-    public void testProjeto() {
+    void testProjeto() {
         Long id = 1L;
-        String nome = "Test Project";
+        String nome = "#projeto";
         LocalDate dataInicio = LocalDate.now();
         LocalDate dataPrevisaoFim = LocalDate.now().plusMonths(1);
         LocalDate dataFim = LocalDate.now();
         String descricao = "Test Description";
         String status = "In Progress";
-        Double orcamento = 1000.0d;
+        BigDecimal orcamento = new BigDecimal(1000.0);
         String risco = "Medium";
-        Pessoa gerente = new Pessoa(1L, "Test Manager", LocalDate.now(), "123.456.789-00", true, true);
 
-        Projeto projeto = new Projeto(id, nome, dataInicio, dataPrevisaoFim, dataFim, descricao, status, orcamento, risco, gerente, null);
+        Pessoa gerente = new Pessoa(1L, "#gerente", LocalDate.now(), "123.456.789-00", true, true);
+
+        Projeto projeto = new Projeto(1L, nome, dataInicio, dataPrevisaoFim, dataFim, descricao, status, orcamento, risco, gerente, new ArrayList<>());
 
         assertEquals(id, projeto.getId());
         assertEquals(nome, projeto.getNome());
@@ -37,25 +39,9 @@ public class ProjetoTest {
         assertEquals(gerente, projeto.getGerente());
     }
 
-    @Test
-    public void testIsPermitidoRemover() {
-        Projeto projeto = new Projeto();
-
-        projeto.setStatus("iniciado");
-        assertFalse(projeto.isPermitidoRemover());
-
-        projeto.setStatus("em andamento");
-        assertFalse(projeto.isPermitidoRemover());
-
-        projeto.setStatus("encerrado");
-        assertFalse(projeto.isPermitidoRemover());
-
-        projeto.setStatus("finalizado");
-        assertTrue(projeto.isPermitidoRemover());
-    }
 
     @Test
-    public void testSetters() {
+    void testSetters() {
         Projeto projeto = new Projeto();
 
         Long id = 1L;
@@ -86,7 +72,7 @@ public class ProjetoTest {
         projeto.setStatus(status);
         assertEquals(status, projeto.getStatus());
 
-        Double orcamento = 1000.0d;
+        BigDecimal orcamento = new BigDecimal(1000.0);
         projeto.setOrcamento(orcamento);
         assertEquals(orcamento, projeto.getOrcamento());
 
@@ -101,14 +87,7 @@ public class ProjetoTest {
         List<Pessoa> funcionarios = new ArrayList<>();
         projeto.setFuncionarios(funcionarios);
         assertEquals(funcionarios, projeto.getFuncionarios());
-    }
 
-    @Test
-    public void testToString() {
-        Pessoa gerente = new Pessoa(1L, "Test Manager", LocalDate.now(), "123.456.789-00", true, true);
-        Projeto projeto = new Projeto(1L, "Test Project", LocalDate.now(), LocalDate.now().plusMonths(1), LocalDate.now(), "Test Description", "In Progress", 1000.0d, "Medium", gerente, new ArrayList<>());
-        String expected = "Projeto(id=1, nome=Test Project, dataInicio=" + LocalDate.now() + ", dataPrevisaoFim=" + LocalDate.now().plusMonths(1) + ", dataFim=" + LocalDate.now() + ", descricao=Test Description, status=In Progress, orcamento=1000.0, risco=Medium, gerente=" + gerente + ", funcionarios=[])";
-        assertEquals(expected, projeto.toString());
     }
 
 

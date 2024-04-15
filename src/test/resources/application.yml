@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8081}
   servlet:
     encoding:
       charset: 'UTF-8'
@@ -15,16 +15,14 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:postgresql://${DB_URL:localhost}:${DB_PORT:5432}/${DB_NAME:codegroup}
-    username: ${DB_USERNAME:codegroup}
-    password: ${DB_PASSWORD:123456}
-    connectionTestQuery: 'SELECT 1'
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
   jpa:
     properties:
       hibernate:
-        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+        dialect: 'org.hibernate.dialect.H2Dialect'
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     generate-ddl: true
   sql:
     init:

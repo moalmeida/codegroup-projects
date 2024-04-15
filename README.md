@@ -1,4 +1,83 @@
-# Projeto Codegroup
+# Projeto Codegroup Projects
+
+## Descrição
+
+Este projeto é um exemplo de aplicação Spring Boot que gerencia projetos.
+
+## Tecnologias
+
+- Java
+- Spring Boot
+- Maven
+- SonarQube
+- Banco de Dados Postgres
+- Docker
+
+## Funcionalidades
+
+- Cadastro de projetos
+- Edição de projetos
+- Listagem de projetos
+- Exclusão de projetos
+- Cadastro de membros
+- Cadastro de pessoas
+- Edição de pessoas
+- Exclusão de pessoas
+
+
+## Qualidade de código
+
+Este projeto utiliza o SonarQube para análise de qualidade de código. O relatório de qualidade de código pode ser acessado em `https://sonarcloud.io/summary/new_code?id=moalmeida_codegroup-projects`.
+
+
+## Como executar
+
+Para executar o projeto, primeiro construa o projeto com o comando abaixo:
+
+```bash
+mvn clean package
+```
+
+Em seguida, execute o seguinte comando:
+
+```bash
+java -jar target/projects-0.0.1-SNAPSHOT.jar
+```
+
+Verifique o nome do arquivo JAR gerado na pasta `target`.
+
+## Como testar
+
+Para testar o projeto, use o seguinte comando:
+
+```bash
+mvn test
+```
+
+## Como executar o SonarQube
+
+Para executar a análise do SonarQube, use o seguinte comando:
+
+```bash
+mvn sonar:sonar \
+-Dsonar.projectKey=codegroup-projects \
+-Dsonar.host.url=http://localhost:9000 \
+-Dsonar.login=sqp_a3da92900bbc0e0b5e27f877187d7ead6a60e9db
+```
+
+Substitua os valores de `sonar.projectKey` e `sonar.login` conforme necessário.
+
+## Funcionalidades
+
+- Cadastro de projetos
+- Edição de projetos
+- Listagem de projetos
+- Exclusão de projetos
+
+
+## Qualidade de código
+
+Este projeto utiliza o JUNIT para testes unitários e o Jacoco para cobertura de testes. O relatório de cobertura de testes pode ser acessado em `target/`.
 
 Este é um projeto Java Spring Boot, que utiliza Maven como ferramenta de build e SonarQube para análise de qualidade de código.
 
@@ -46,7 +125,7 @@ Para executar o projeto, primeiro construa o projeto com o comando acima, depois
 java -jar target/projects-0.0.1-SNAPSHOT.jar
 ```
 
-Verifique o nome do arquivo JAR gerado na pasta `target`.
+Verifique o nome do arquivo JAR gerado na pasta `target/jacoco/index.html`.
 
 ## Como executar o SonarQube
 

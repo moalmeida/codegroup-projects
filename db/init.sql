@@ -30,21 +30,34 @@ CREATE TABLE projeto
         ON DELETE NO ACTION
 );
 
+-- CREATE TABLE membros
+-- (
+--     idprojeto BIGINT NOT NULL,
+--     idpessoa BIGINT NOT NULL,
+--     CONSTRAINT pk_membros_projeto PRIMARY KEY (idprojeto),
+--     CONSTRAINT fk_membros_pessoa FOREIGN KEY (idprojeto)
+--         REFERENCES projeto (id)
+--         MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION,
+--     CONSTRAINT fk_pessoa FOREIGN KEY (idpessoa)
+--         REFERENCES pessoa (id)
+--         MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION
+-- );
+
+
 CREATE TABLE membros
-(
-    idprojeto BIGINT NOT NULL,
-    idpessoa BIGINT NOT NULL,
-    CONSTRAINT pk_membros_projeto PRIMARY KEY (idprojeto),
-    CONSTRAINT fk_membros_pessoa FOREIGN KEY (idprojeto)
-        REFERENCES projeto (id)
-        MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT fk_pessoa FOREIGN KEY (idpessoa)
-        REFERENCES pessoa (id)
-        MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+( idprojeto bigint NOT NULL,
+  idpessoa bigint NOT NULL,
+  CONSTRAINT pk_membros PRIMARY KEY (idprojeto, idpessoa), -- composite primary key
+  CONSTRAINT fk_membros_projeto FOREIGN KEY (idprojeto) --foreign key to project
+      REFERENCES projeto (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_membros_pessoa FOREIGN KEY (idpessoa) --foreign key to person
+      REFERENCES pessoa (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 
@@ -93,6 +106,10 @@ INSERT INTO membros (
 )
 VALUES
     (1, 3),
+    (1, 5),
     (2, 4),
+    (2, 6),
     (3, 5),
+    (3, 7),
+    (3, 4),
     (4, 6);

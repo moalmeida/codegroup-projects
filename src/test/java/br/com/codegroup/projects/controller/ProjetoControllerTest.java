@@ -1,19 +1,24 @@
 package br.com.codegroup.projects.controller;
 
+import br.com.codegroup.projects.domain.dto.ProjetoRequest;
 import br.com.codegroup.projects.entity.Projeto;
+import br.com.codegroup.projects.repository.MembrosRepository;
+import br.com.codegroup.projects.repository.PessoaRepository;
 import br.com.codegroup.projects.repository.ProjetoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class ProjetoControllerTest {
@@ -24,50 +29,74 @@ class ProjetoControllerTest {
     @Mock
     ProjetoRepository projetoRepository;
 
+    @Mock
+    PessoaRepository pessoaRepository;
+
+    @Mock
+    MembrosRepository membrosRepository;
+
+    @Mock
+    Model model;
+
     @BeforeEach
-    public void init() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
+
     @Test
-    public void testSalvar() {
+    void buscarTodos() {
+        List<Projeto> projetos = new ArrayList<>();
         Projeto projeto = new Projeto();
-        when(projetoRepository.save(any(Projeto.class))).thenReturn(projeto);
+        projeto.setNome("#projeto");
+        projetos.add(projeto);
 
-        ResponseEntity<Projeto> response = projetoController.salvar(projeto);
+        when(projetoRepository.buscarTodos()).thenReturn(projetos);
 
-        assertEquals(projeto, response.getBody());
-        verify(projetoRepository, times(1)).save(any(Projeto.class));
+        String viewName = projetoController.buscarTodos(model);
+
+        assertEquals("projetos/list", viewName);
+        verify(model, times(1)).addAttribute(eq("projetos"), any());
+        verify(projetoRepository, times(1)).buscarTodos();
     }
 
     @Test
-    public void testAtualizar() {
+    void removerPorId() {
         Long id = 1L;
-        Projeto entrada = new Projeto();
-        entrada.setNome("Updated Name");
+        projetoController.removerPorId(id);
 
-        Projeto entidade = new Projeto();
-        entidade.setNome("Old Name");
-
-        when(projetoRepository.findById(id)).thenReturn(Optional.of(entidade));
-        when(projetoRepository.save(any(Projeto.class))).thenReturn(entrada);
-
-        ResponseEntity<Projeto> response = projetoController.atualizar(id, entrada);
-
-        assertEquals(entrada.getNome(), Objects.requireNonNull(response.getBody()).getNome());
-        verify(projetoRepository, times(1)).findById(id);
-        verify(projetoRepository, times(1)).save(any(Projeto.class));
+        verify(projetoRepository, times(1)).removerPorId(any());
     }
 
     @Test
-    public void testAtualizarWhenEntidadeIsEmpty() {
+    void salvar() {
+        ProjetoRequest projeto = new ProjetoRequest();
+        projeto.setNome("#projeto");
+
+        projetoController.salvar(projeto);
+
+        verify(projetoRepository, times(1)).salvar(any());
+    }
+
+    @Test
+    void formulario() {
+        String viewName = projetoController.formulario(model);
+
+        assertEquals("projetos/form", viewName);
+    }
+
+    @Test
+    void formularioAlterar() {
         Long id = 1L;
         Projeto projeto = new Projeto();
-        when(projetoRepository.findById(id)).thenReturn(Optional.empty());
+        projeto.setNome("#projeto");
 
-        ResponseEntity<Projeto> response = projetoController.atualizar(id, projeto);
+        when(projetoRepository.buscarPorId(eq(id))).thenReturn(Optional.of(projeto));
 
-        verify(projetoRepository, times(1)).findById(id);
+        String viewName = projetoController.formularioAlterar(model, id);
+
+        assertEquals("projetos/form", viewName);
+        verify(model, times(1)).addAttribute(eq("projeto"), any());
+        verify(projetoRepository, times(1)).buscarPorId(eq(id));
     }
-
 }
