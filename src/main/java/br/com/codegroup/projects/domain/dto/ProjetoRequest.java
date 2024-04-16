@@ -26,7 +26,7 @@ public class ProjetoRequest {
     private String status;
     @NotNull
     private Long gerente;
-    private Double orcamento;
+    private long orcamento;
     private String risco;
     private String funcionarios;
 }

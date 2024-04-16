@@ -67,7 +67,7 @@ public class ProjetoController {
         projeto.setDataPrevisaoFim(dataPrevisaoFim);
         projeto.setDataFim(dataFim);
         projeto.setStatus(request.getStatus());
-        projeto.setOrcamento(request.getOrcamento());
+        projeto.setOrcamento((double) request.getOrcamento());
         projeto.setRisco(request.getRisco());
 
         projetoRepository.salvar(projeto);

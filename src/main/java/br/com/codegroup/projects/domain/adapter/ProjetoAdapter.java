@@ -26,7 +26,7 @@ public class ProjetoAdapter {
                 .dataFim(projeto.getDataFim() != null ? projeto.getDataFim().format(formatter) : null)
                 .descricao(projeto.getDescricao())
                 .status(projeto.getStatus())
-                .orcamento(projeto.getOrcamento())
+                .orcamento(projeto.getOrcamento() != null ? projeto.getOrcamento().longValue() : 0)
                 .risco(projeto.getRisco())
                 .gerente(projeto.getGerente() != null ? pessoaAdapter.transformarPessoaResponse(projeto.getGerente()) : null)
                 .funcionarios(pessoaAdapter.transformarPessoasResponse(projeto.getFuncionarios()))

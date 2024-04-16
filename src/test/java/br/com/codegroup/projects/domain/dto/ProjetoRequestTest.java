@@ -18,7 +18,7 @@ class ProjetoRequestTest {
         projetoRequest.setDataPrevisaoFim("01/03/2022");
         projetoRequest.setStatus("In Progress");
         projetoRequest.setGerente(1L);
-        projetoRequest.setOrcamento(1000d);
+        projetoRequest.setOrcamento(1000L);
         projetoRequest.setRisco("Medium");
         projetoRequest.setFuncionarios("Test Funcionarios");
 
@@ -30,7 +30,7 @@ class ProjetoRequestTest {
         assertEquals("01/03/2022", projetoRequest.getDataPrevisaoFim());
         assertEquals("In Progress", projetoRequest.getStatus());
         assertEquals(1L, projetoRequest.getGerente());
-        assertEquals(1000d, projetoRequest.getOrcamento());
+        assertEquals(1000L, projetoRequest.getOrcamento());
         assertEquals("Medium", projetoRequest.getRisco());
         assertEquals("Test Funcionarios", projetoRequest.getFuncionarios());
     }

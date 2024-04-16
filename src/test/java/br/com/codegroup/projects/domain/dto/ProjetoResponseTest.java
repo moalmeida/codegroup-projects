@@ -23,7 +23,7 @@ class ProjetoResponseTest {
         projetoResponse.setStatus("In Progress");
         projetoResponse.setGerente(new PessoaResponse(1L, "Test Manager", "01/01/1980", "123.456.789-00", true, true));
         projetoResponse.setFuncionario("Test Funcionario");
-        projetoResponse.setOrcamento(1000d);
+        projetoResponse.setOrcamento(1000L);
         projetoResponse.setRisco("Medium");
         projetoResponse.setFuncionarios(Collections.singletonList(new PessoaResponse(2L, "Test Funcionario", "01/01/1980", "123.456.789-01", false, true)));
         projetoResponse.setPermitidoRemover(true);
@@ -37,7 +37,7 @@ class ProjetoResponseTest {
         assertEquals("In Progress", projetoResponse.getStatus());
         assertEquals(1L, projetoResponse.getGerente().getId());
         assertEquals("Test Funcionario", projetoResponse.getFuncionario());
-        assertEquals(1000d, projetoResponse.getOrcamento());
+        assertEquals(1000L, projetoResponse.getOrcamento());
         assertEquals("Medium", projetoResponse.getRisco());
         assertEquals(1, projetoResponse.getFuncionarios().size());
         assertEquals(2L, projetoResponse.getFuncionarios().get(0).getId());

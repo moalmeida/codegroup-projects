@@ -79,7 +79,7 @@
                         <label class="form-label mt-4 fs-4" for="input_orcamento">
                             orçamento total
                         </label>
-                        <input name="orcamento" class="form-control fs-4 fmt-money" id="input_orcamento" type="text" value="${projeto.orcamento}" />
+                        <input name="orcamento" class="form-control fs-4 fmt-money" id="input_orcamento" type="text"  style="direction: rtl;" value="${projeto.orcamento}" />
                         <label class="form-label mt-4 fs-4" for="select_status">
                             status
                         </label>
@@ -154,7 +154,6 @@
 
     $(document).ready(function () {
         $('.fmt-date').mask('00/00/0000');
-        //$('.fmt-money').mask('000,000.00', { reverse: true });
 
         $("#autocomplete_funcionarios").autocomplete({
             source: available,
