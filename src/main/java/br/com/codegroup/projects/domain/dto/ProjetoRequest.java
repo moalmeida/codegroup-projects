@@ -20,7 +20,6 @@ public class ProjetoRequest {
     private String dataPrevisaoFim;
     private String status;
     private Long gerente;
-    private String funcionario;
     private Double orcamento;
     private String risco;
     private String funcionarios;

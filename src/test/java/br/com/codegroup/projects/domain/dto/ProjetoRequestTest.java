@@ -2,8 +2,6 @@ package br.com.codegroup.projects.domain.dto;
 
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProjetoRequestTest {
@@ -20,7 +18,6 @@ class ProjetoRequestTest {
         projetoRequest.setDataPrevisaoFim("01/03/2022");
         projetoRequest.setStatus("In Progress");
         projetoRequest.setGerente(1L);
-        projetoRequest.setFuncionario("Test Funcionario");
         projetoRequest.setOrcamento(1000d);
         projetoRequest.setRisco("Medium");
         projetoRequest.setFuncionarios("Test Funcionarios");
@@ -33,7 +30,6 @@ class ProjetoRequestTest {
         assertEquals("01/03/2022", projetoRequest.getDataPrevisaoFim());
         assertEquals("In Progress", projetoRequest.getStatus());
         assertEquals(1L, projetoRequest.getGerente());
-        assertEquals("Test Funcionario", projetoRequest.getFuncionario());
         assertEquals(1000d, projetoRequest.getOrcamento());
         assertEquals("Medium", projetoRequest.getRisco());
         assertEquals("Test Funcionarios", projetoRequest.getFuncionarios());
