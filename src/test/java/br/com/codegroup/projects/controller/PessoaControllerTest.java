@@ -12,6 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
@@ -40,9 +44,13 @@ class PessoaControllerTest {
     @Mock
     Model model;
 
+    private MockMvc mockMvc;
+
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        this.mockMvc = MockMvcBuilders.standaloneSetup(pessoaController).build();
     }
 
 
@@ -135,4 +143,23 @@ class PessoaControllerTest {
 
         assertEquals(204, response.getStatusCodeValue());
     }
+
+    @Test
+    void buscarRelatorio() throws Exception {
+        List<Pessoa> pessoas = new ArrayList<>();
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome("#pessoa");
+        pessoas.add(pessoa);
+
+        when(pessoaRepository.buscarTodos()).thenReturn(pessoas);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/pessoas/relatorio")
+                        .accept("application/pdf"))
+                .andReturn().getResponse();
+
+        assertNotNull(response.getContentAsString());
+        assertEquals("application/pdf", response.getContentType());
+    }
+
 }

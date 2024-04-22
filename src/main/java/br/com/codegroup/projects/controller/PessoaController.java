@@ -5,13 +5,20 @@ import br.com.codegroup.projects.domain.dto.PessoaRequest;
 import br.com.codegroup.projects.domain.dto.PessoaResponse;
 import br.com.codegroup.projects.entity.Pessoa;
 import br.com.codegroup.projects.repository.PessoaRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,5 +96,23 @@ public class PessoaController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/relatorio")
+    public void buscarRelatorio(HttpServletResponse response) throws JRException, IOException {
+        var parameters = new HashMap<String, Object>();
+        var pessoas = pessoaRepository.buscarTodos();
+        var pessoasDTO = pessoaAdapter.transformarPessoasResponse(pessoas);
+
+        InputStream inputStream = getClass().getResourceAsStream("/pessoas.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(pessoasDTO));
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=projetos.pdf");
+
+        final OutputStream outStream = response.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+    }
+
 
 }
