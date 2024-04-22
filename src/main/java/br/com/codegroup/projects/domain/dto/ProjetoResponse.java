@@ -2,7 +2,6 @@ package br.com.codegroup.projects.domain.dto;
 
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @NoArgsConstructor

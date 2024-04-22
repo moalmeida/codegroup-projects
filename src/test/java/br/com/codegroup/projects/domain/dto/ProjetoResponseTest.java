@@ -2,7 +2,6 @@ package br.com.codegroup.projects.domain.dto;
 
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
