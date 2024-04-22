@@ -1,5 +1,7 @@
 # Projeto Codegroup Projects
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=moalmeida_codegroup-projects&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=moalmeida_codegroup-projects)
+
 ## Descrição
 
 Este projeto é um exemplo de aplicação Spring Boot que gerencia projetos.
@@ -27,7 +29,7 @@ Este projeto é um exemplo de aplicação Spring Boot que gerencia projetos.
 
 ## Qualidade de código
 
-Este projeto utiliza o SonarQube para análise de qualidade de código. O relatório de qualidade de código pode ser acessado em `https://sonarcloud.io/summary/new_code?id=moalmeida_codegroup-projects`.
+Este projeto utiliza o SonarQube para análise de qualidade de código. O relatório de qualidade de código pode ser acessado em `https://sonarcloud.io/summary/overall?id=moalmeida_codegroup-projects`.
 
 
 ## Como executar
