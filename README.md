@@ -58,16 +58,19 @@ mvn test
 
 ## Como executar o SonarQube
 
+Caso tenha inicalizado pelo docker, altere a senha do usuário admin com o comando
+
+```bash
+curl -u admin:admin -X POST http://localhost:9000/api/users/change_password?login=admin&previousPassword=admin&password=codegroup
+```
+
+Acesse o SonarQube em  `http://localhost:9000` com os valores de login `admin` e senha `codegroup` para validar o acesso.
+
 Para executar a análise do SonarQube, use o seguinte comando:
 
 ```bash
-mvn sonar:sonar \
--Dsonar.projectKey=codegroup-projects \
--Dsonar.host.url=http://localhost:9000 \
--Dsonar.login=sqp_a3da92900bbc0e0b5e27f877187d7ead6a60e9db
+ mvn verify sonar:sonar -Pcoverage
 ```
-
-Substitua os valores de `sonar.projectKey` e `sonar.login` conforme necessário.
 
 ## Funcionalidades
 
@@ -75,7 +78,6 @@ Substitua os valores de `sonar.projectKey` e `sonar.login` conforme necessário.
 - Edição de projetos
 - Listagem de projetos
 - Exclusão de projetos
-
 
 ## Qualidade de código
 

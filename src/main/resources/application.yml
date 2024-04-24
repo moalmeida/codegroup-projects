@@ -15,7 +15,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:postgresql://${DB_URL:localhost}:${DB_PORT:5432}/${DB_NAME:codegroup}
+    url: jdbc:postgresql://${DB_URL:localhost}:${DB_PORT:5434}/${DB_NAME:codegroup}
     username: ${DB_USERNAME:codegroup}
     password: ${DB_PASSWORD:123456}
     connectionTestQuery: 'SELECT 1'
